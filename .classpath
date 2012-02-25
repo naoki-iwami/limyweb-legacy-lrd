@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="WEB-INF/main/src"/>
+	<classpathentry kind="src" output="distribute-swt/bin" path="distribute-swt/src"/>
+	<classpathentry exported="true" kind="lib" path="WEB-INF/lib/commons-logging-1.0.4.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/freemarker.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/log4j-1.2.9.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/ognl.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/oscore.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/rife-continuations.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/spring.jar" sourcepath="C:/var/src/spring-framework-2.0.5/src"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/velocity-tools-view.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/webwork-2.2.4.jar" sourcepath="C:/var/src/webwork-2.2.5/src/java"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/xwork.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/svnkit.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/commons-net-1.4.0.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/test/lib/mysql-connector-java-5.0.4-bin.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/db4o-6.1-java5.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/commons-io-1.3.2.jar" sourcepath="C:/var/src/commons-io-1.3.2-src/src/java"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/ibatis-2.3.0.677.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/velocity-1.5.jar" sourcepath="D:/var/src/velocity-1.5/src/java"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/commons-lang-2.3.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/commons-collections-3.2.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/dwr.jar" sourcepath="D:/var/src/dwr-2.0.1/java"/>
+	<classpathentry kind="lib" path="distribute-swt/lib/swt.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/limyweb-common"/>
+	<classpathentry exported="true" kind="lib" path="/limyweb-common/lib/ehcache-1.3.0.jar"/>
+	<classpathentry kind="lib" path="/limyweb-common/lib/servlet-api.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="output" path="WEB-INF/classes"/>
+</classpath>

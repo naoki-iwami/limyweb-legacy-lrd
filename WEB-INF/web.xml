@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<web-app>
+
+	<display-name>Limyweb Lrd Application</display-name>
+
+	<!-- WebWork and Spring setting -->
+	<filter>
+		<filter-name>webwork</filter-name>
+		<filter-class>com.opensymphony.webwork.dispatcher.FilterDispatcher</filter-class>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>webwork</filter-name>
+		<url-pattern>*.action</url-pattern>
+	</filter-mapping>
+
+    <listener>
+        <listener-class>org.limy.lrd.ContextLoaderListener</listener-class>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+    
+    <context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>/WEB-INF/applicationContext*.xml</param-value>
+	</context-param>
+
+	<!-- DWR -->
+	<servlet>
+		<description>DWR controller servlet</description>
+		<servlet-name>dwr-invoker</servlet-name>
+		<servlet-class>org.directwebremoting.servlet.DwrServlet</servlet-class>
+		<init-param>
+			<param-name>debug</param-name>
+			<param-value>true</param-value><!-- **MUST BE FALSE at release** -->
+		</init-param>
+		<init-param>
+			<param-name>crossDomainSessionSecurity</param-name>
+			<param-value>false</param-value><!-- TODO CSRF problem. -->
+		</init-param>
+		<init-param>
+			<param-name>classes</param-name>
+			<param-value>
+				org.limy.directwebremoting.webwork.DWRAction,
+				org.limy.directwebremoting.webwork.ActionDefinition,
+				org.limy.directwebremoting.webwork.AjaxResult,
+				org.limy.lrd.LrdDwrAction,
+				org.limy.lrd.common.bean.LrdDwrResult,
+			</param-value>
+		</init-param>
+		<init-param>
+			<param-name>activeReverseAjaxEnabled</param-name>
+			<param-value>true</param-value>
+		</init-param>
+		<init-param>
+			<param-name>maxWaitAfterWrite</param-name>
+			<param-value>500</param-value>
+		</init-param>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>dwr-invoker</servlet-name>
+		<url-pattern>/dwr/*</url-pattern>
+	</servlet-mapping>
+
+	<security-constraint>
+		<web-resource-collection>
+			<web-resource-name>lrd admin</web-resource-name>
+			<url-pattern>/admin.action</url-pattern>
+			<url-pattern>/addRepository.action</url-pattern>
+			<url-pattern>/addDeployInfo.action</url-pattern>
+			<url-pattern>/addFileDeployInfo.action</url-pattern>
+			<url-pattern>/updateProjectSetting.action</url-pattern>
+			<url-pattern>/modifyTemplate.action</url-pattern>
+		</web-resource-collection>
+		<auth-constraint>
+			<role-name>lrd-admin</role-name>
+		</auth-constraint>
+	</security-constraint>
+
+	<security-constraint>
+		<web-resource-collection>
+			<web-resource-name>lrd resource</web-resource-name>
+			<url-pattern>/lrd.action</url-pattern>
+			<url-pattern>/dwr/call/plainpoll/*</url-pattern>
+		</web-resource-collection>
+		<auth-constraint>
+			<role-name>lrd</role-name>
+		</auth-constraint>
+	</security-constraint>
+	
+	<login-config>
+		<auth-method>DIGEST</auth-method>
+		<realm-name>Lrd Realm</realm-name>
+	</login-config>
+	
+	<security-role>
+		<role-name>lrd-admin</role-name>
+		<role-name>lrd</role-name>
+	</security-role>
+	
+	<error-page>
+		<error-code>403</error-code>
+		<location>/error_forbidden.html</location>
+	</error-page>
+	
+</web-app>

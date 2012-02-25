@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- デプロイ先を記述する設定ファイル -->
+<deploy-info>
+
+	<charset>UTF-8</charset>
+	<rootDirName>test</rootDirName>
+	
+	<repository>
+		<file>
+			<baseDir>c:/var/tmp/file</baseDir>
+		</file>
+	</repository>
+
+	<deploy>
+		<id>test</id>
+		<name>テスト環境</name>
+		<url>http://localhost/test/</url>
+		<ftp>
+			<host>localhost</host>
+			<dir>/home/</dir>
+			<user>test</user>
+			<pass>test</pass>
+		</ftp>
+	</deploy>
+
+</deploy-info>

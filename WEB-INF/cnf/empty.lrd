@@ -1,0 +1,14 @@
+title=Sample Page
+=begin
+= Chapter 1
+= Chapter 2
+= Chapter 3
+= Chapter 4
+
+text
+
+((*strong*)) (({variable}))
+
+  pre text
+
+=end

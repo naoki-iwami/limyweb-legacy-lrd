@@ -1,0 +1,71 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>テンプレート編集</title>
+<link href="style/lrd-admin.css" type="text/css" rel="stylesheet" />
+<link href="context/$repositoryId/.template/style/maven-base.css" type="text/css" rel="stylesheet" />
+<link href="context/$repositoryId/.template/style/maven-theme.css" type="text/css" rel="stylesheet" />
+<link href="context/$repositoryId/.template/style/limy-theme.css" type="text/css" rel="stylesheet" />
+<script src="dwr/interface/DWRAction.js"></script>
+<script src="dwr/engine.js"></script>
+<script src="dwr/util.js"></script>
+<script src="script/DWRActionUtil.js"></script>
+<script>
+function get(id) { return document.getElementById(id); }
+function preview() {
+	if (get("textBox").style.display == "none") {
+		get("textBox").style.display = "block";
+		get("previewBox").style.display = "none";
+	} else {
+		get("textBox").style.display = "none";
+		get("previewBox").style.display = "block";
+
+		get("dwrFormBase").methodName.value = "templatePreview";
+		get("dwrFormBase").contents.value = get("contents").value;
+		DWRActionUtil.execute(
+				{ namespace:'/', action:'dwr', executeResult:'false' },
+				'dwrFormBase', function(result) {
+			get("previewText").innerHTML = result.mainString;
+		});
+
+	}
+}
+</script>
+</head>
+<body>
+
+<h1>テンプレート編集</h1>
+
+<br>
+
+<div style="margin-left: 10; margin-right: 10;">
+
+<a href="javascript:preview()">Toggle Preview</a>
+
+<div align="right"><a href="modifyTemplate.action?repositoryId=$repositoryId">テンプレートTOP</a></div>
+
+<div id="textBox" style="">
+	<form action="modifyTemplate.action" method="post">
+		<input type="hidden" name="repositoryId" value="$repositoryId">
+		<input type="hidden" name="file" value="$file">
+		<textarea id="contents" name="templateContents" cols="120" rows="30" class="editBox">$!templateContents</textarea><br>
+		<br>
+		<input type="submit" value="更新" class="button">
+	</form>
+</div>
+<div id="previewBox" style="display: none">
+	<br><br><br><br>
+	<div id="previewText" style="border: 1px dashed gray"></div>
+</div>
+
+</div>
+
+<form id="dwrFormBase">
+	<input type="hidden" name="repositoryId" value="">
+	<input type="hidden" name="lrdPath" value="">
+	<input type="hidden" name="methodName" value="">
+	<input type="hidden" name="contents" value="">
+</form>
+
+</body>
+</html>

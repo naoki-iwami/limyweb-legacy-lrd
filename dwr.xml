@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<dwr>
+  <allow>
+
+  	<create creator="none" javascript="DWRAction">
+  		<param name="class"
+  			value="org.limy.directwebremoting.webwork.DWRAction" />
+  		<include method="execute" />
+  	</create>
+
+  	<convert converter="bean"
+  		match="org.limy.directwebremoting.webwork.ActionDefinition">
+  		<param name="include"
+  			value="namespace,action,method,executeResult" />
+  	</convert>
+
+  	<convert converter="bean"
+  		match="org.limy.directwebremoting.webwork.AjaxResult" />
+  		
+  </allow>
+</dwr>

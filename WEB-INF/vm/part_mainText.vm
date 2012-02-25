@@ -1,0 +1,43 @@
+<td>
+	Title : <input id="titleText" size="40" class="textbox">
+	<textarea id="bodyText" cols="100" rows="20" class="textbox"></textarea><br>
+</td>
+<td width="16"></td>
+<td valign="top" id="buttonBox" width="40%">
+
+	日付表示 : <input type="checkbox" id="chkPrintTime" checked><br>
+	特殊コードブロック : <input type="checkbox" id="chkExtCode"><br>
+	依存ファイル : <input id="dependText" class="textbox"><br>
+	参照ファイル : <input id="refText" class="textbox"><br>
+	最終更新日付 : <input id="dateText" class="textbox"><br>
+	<br>
+
+  <br>
+  <input type="button" value="プレビュー" class="button" onclick="preview()"><br>
+  <br>
+  <input type="button" value="コミット（更新）" class="button" onclick="commit()"><br>
+  <br>
+  デプロイ<br>
+  #foreach ($target in $deployInfos)
+  <div style="margin-left: 20">
+	<table>
+		<tr>
+		<td><input type="button" value="$target.name" class="button" onclick="deployFrame('$target.id')"><!--$target.deployUrl--></td>
+		<td><input type="button" value="更新ページ" class="button" onclick="deployRecent('$target.id')"></td>
+		<td align="right"><input type="button" value="full" class="button" onclick="deployFull('$target.id')"></td>
+		</tr>
+	</table>
+  </div>
+
+  <br>
+  #end
+
+  <div id="bar0" style="border: 1px dotted red; background-color: white; height: 20; display: none;">
+	<div id="bar1" style="background-color: red; width: 0;height: 20;"><br></div>
+	<span id="nowCount">?</span> / <span id="allCount">?</span>
+  </div>
+
+  <br>
+  <input type="button" value="Add RSS" class="button" onclick="addRss()"><br>
+</td>
+  

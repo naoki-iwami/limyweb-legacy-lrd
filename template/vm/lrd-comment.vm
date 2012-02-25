@@ -1,0 +1,41 @@
+<div align=center class="underlineTitle"></div>
+<div id="commentH">
+	<div align="center">
+	    <a href="javascript:showComment()" style="text-decoration: underline;">
+	    	[コメント（$Util.getSize($comments)）$!Util.getLatestDate($comments)]
+	    </a>
+    </div>
+</div>    
+
+<div id="commentS" align="left" style="display: none;">
+
+	<div align="center">
+	    <a href="javascript:hideComment()" style="text-decoration: underline;">[コメント欄を閉じる]</a>
+    </div>
+	<a name="comment"></a>
+	[コメント一覧]<br>
+	
+	#foreach ($com in $comments)
+	<br>
+	<div align="left"><img src="$!{resourceUrlBase}/images/circle.gif">$com.userName $com.time</div>
+	<div>$com.text</div>
+	#end
+
+	<br>
+	<form action="$!{baseUrl}comment.action" method="post">
+	  <input type="hidden" name="repositoryName" value="$repositoryName">
+	  <input type="hidden" name="lrdPath" value="$lrdPath">
+	  <input type="hidden" name="submit" value="on">
+	  <div align=center class="underlineTitle"></div>
+	  <br>
+	  名前 :<br>
+	  <input class="resInput" size=24 maxlength=40 name="resName" value="なおき"><br>
+	  <br>
+	  コメント :<br>
+	  <textarea class="resInput" name="resText" cols=60 rows=5></textarea><br>
+	  <br>
+
+	  <input type=submit class="resButton" value="コメント投稿">
+	</form>
+
+</div>

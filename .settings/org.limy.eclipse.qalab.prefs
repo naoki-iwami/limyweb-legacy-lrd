@@ -1,0 +1,17 @@
+#Sun Aug 19 11:50:54 JST 2007
+buildProperties=build_qa.properties
+buildXml=build_qa.xml
+checkstyleConfig=limy-checks.xml
+checkstyleConfigType=1
+dotExe=C\:\\Program Files\\ATT\\Graphviz\\bin\\dot.exe
+eclipse.preferences.version=1
+enableIndivisual=false
+enableJdepend=true
+enableUmlgraph=true
+excludeJdepends=java.*\norg.apache.*\norg.directwebremoting\norg.springframework.*\norg.tmatesoft.*\nnet.*\ncom.*\njavax.*\njunit.*\norg.junit\norg.limy.common.*
+graphHorizontal=true
+graphInferrel=true
+graphJavadoc=true
+ignorePackages=org.limy.izpack\norg.limy.directwebremoting.webwork
+pmdConfig=limy-pmd-ruleset.xml
+pmdConfigType=1

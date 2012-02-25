@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://purl.org/rss/1.0/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:cc="http://web.resource.org/cc/" xml:lang="ja">
+
+#set ($channel = $bean.channel)
+
+<channel rdf:about="$!channel.rdfAbout">
+	<title>$!channel.title</title>
+	<link>$!channel.link</link>
+	<description>$!channel.description</description>
+	<dc:language>$!channel.language</dc:language>
+	<items>
+	  <rdf:Seq>
+	    #foreach ($item in $bean.items)
+		  <rdf:li rdf:resource="$item.link" />
+		#end
+	  </rdf:Seq>
+	</items>
+</channel>
+
+#foreach ($item in $bean.items)
+  <item rdf:about="$item.link">
+	<link>$item.link</link>
+	<title><![CDATA[$item.title]]></title>
+	<description><![CDATA[$!item.description]]></description>
+	<dc:date>$item.w3cDate</dc:date>
+  </item>
+#end
+
+</rdf:RDF>

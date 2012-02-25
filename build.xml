@@ -1,0 +1,68 @@
+<project name="limyweb-lrd" default="make-distribute">
+	
+	<property file="${basedir}/build.properties"/>
+<!--
+	<taskdef name="izpack" classpath="${izpack.dir}/lib/compiler.jar"
+		classname="com.izforge.izpack.ant.IzPackTask"/>
+-->
+	<target name="update-common-jar">
+		<ant dir="../common" antfile="build.xml" target="makejar"></ant>
+		<copy file="../common/dist/limyweb-common.jar" tofile="WEB-INF/lib/limyweb-common.jar" />
+	</target>
+	
+	<target name="make-distribute-izpack" depends="update-common-jar">
+
+		<jar destfile="${izpack.dir}/bin/customActions/LrdCompilerListener.jar">
+			<fileset dir="distribute/bin"></fileset>
+		</jar>
+		<jar destfile="${izpack.dir}/bin/customActions/LrdInstallerListener.jar">
+			<fileset dir="distribute/bin"></fileset>
+		</jar>
+
+		<izpack basedir="${basedir}" input="distribute/install.xml"
+			output="limyweb-lrd-install.jar"
+			izPackDir="${izpack.dir}/"
+		>
+		</izpack>
+		
+	</target>
+	
+	<path id="all.classpath">
+	    <pathelement location="distribute-swt/bin"/>
+<!--	    <pathelement location="distribute-swt/lib"/>-->
+	    <pathelement location="WEB-INF/lib/commons-io-1.3.2.jar"/>
+	</path>
+
+	<target name="make-distribute" depends="update-common-jar">
+		
+		<java classname="org.limy.lrd.distribute.InstallListCreator"
+			classpathref="all.classpath"/>
+		
+		<jar destfile="limyweb-lrd-installer.jar" manifest="distribute-swt/META-INF/MANIFEST.MF">
+			<fileset dir="distribute-swt/bin" />
+			<!--<fileset dir="distribute-swt/swt-classes" />-->
+			<fileset dir="distribute-swt/static" />
+			<fileset dir="." includes="distribute-swt/template/**" />
+			<fileset dir="distribute-swt" includes="alllist" />
+			<fileset dir="." includes="images/**" />
+			<fileset dir="." includes="script/**" />
+			<fileset dir="." includes="style/**" />
+			<fileset dir="." includes="template/**" />
+			<fileset dir="." includes="WEB-INF/classes/**"
+				excludes="WEB-INF/classes/*.properties, WEB-INF/classes/log4j.xml" />
+			<fileset dir="." includes="WEB-INF/cnf/**" excludes="WEB-INF/cnf/*.properties" />
+			<fileset dir="." includes="WEB-INF/lib/**" />
+			<fileset dir="." includes="WEB-INF/vm/**" />
+			<fileset dir="." includes="WEB-INF/*"
+				excludes="WEB-INF/applicationContext-dao.xml, WEB-INF/applicationContext-datasource.xml, WEB-INF/web.xml" />
+		</jar>
+	</target>
+
+	<target name="deploy">
+		<ftp server="${remote.host}" userid="${remote.user}" password="${remote.pass}"
+				remotedir="${tomcat.dir}/webapps">
+			<fileset dir="." includes="limyweb-lrd.war"></fileset>
+		</ftp>
+	</target>
+	
+</project>

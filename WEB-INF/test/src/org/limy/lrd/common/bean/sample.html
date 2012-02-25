@@ -1,0 +1,505 @@
+
+<div id="leftColumn">
+	<div id="navcolumn">
+		<div id="menuOverview">
+						<strong><a href="lrd.action?lrdPath=sample.lrd">Tomcat5 - server.xml</a></strong>
+			</div>
+    </div>
+</div>
+
+<div id="bodyColumn">
+	<div class="contentBox">
+		<p>Tomcat5.5のserver.xmlについての解説です。<br />項目の中にはまだ実際に機能していないものも多数あります。<br />また、今後新たな項目が追加される可能性もあります。<br /></p>
+<a name="limy:3"></a><h2>要素の親子関係
+</h2>
+<p><div align="center"><br /><img src="/images/program/server_xml.png" alt="親子関係" /><br /></div></p>
+<a name="limy:5"></a><h2>Server
+</h2>
+<p>server.xmlのルートになる唯一の要素(Element)です。<br /></p>
+<dl><dt><a name="limy:7">className
+</a></dt><dd><p><p>使用するサーブレットコンテナクラスを指定します。<br />このクラスは <code>org.apache.catalina.Server</code> インターフェイスを実装している必要があります。<br />省略すると、<code>org.apache.catalina.core.StandardServer</code> がデフォルトで使用されます。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:9">port
+</a></dt><dd><p><p>このサーバがシャットダウンコマンドを受け取るために待機するポート番号を指定します。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:11">shutdown
+</a></dt><dd><p><p>このサーバをシャットダウンさせる為に使用するコマンド文字列を指定します。<br />上で指定したポートは、この文字列を受け取るとサーバをシャットダウンさせます。<br /></p>
+</p></dd></dl><p>子要素 : <a href="sample.html#limy:16">Service</a> / <a href="sample.html#limy:109">GlobalNamingResources</a> <br /></p>
+<p>親要素 : <a href="sample.html#limy:6">Server</a><br /></p>
+<a name="limy:15"></a><h2>Service
+</h2>
+<p>サービスを表現する要素です。一つもしくはそれ以上のコネクタと唯一のエンジンを子に持ちます。<br /></p>
+<dl><dt><a name="limy:17">className
+</a></dt><dd><p><p>使用するサービスクラスを指定します。<br />このクラスは <code>org.apache.catalina.Service</code> インターフェイスを実装している必要があります。<br />省略すると、<code>org.apache.catalina.core.StandardService</code> がデフォルトで使用されます。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:19">name
+</a></dt><dd><p><p>このサービスの名前を記述します。<br />サーバ内に複数のサービスがある場合は、それらの名前はユニークである必要があります。<br /></p>
+</p></dd></dl><p>子要素 : <a href="sample.html#limy:138">Engine</a> / <a href="sample.html#limy:23">Connector</a><br /></p>
+<a name="limy:22"></a><h2>Connector
+</h2>
+<p>ここでTomcatと外部ポート(通常はHTTP)との接続方法を指定します。<br /></p>
+<dl><dt><a name="limy:24">allowTrace
+</a></dt><dd><p><p><code>true</code> にすると、「TRACE HTTPメソッド」を有効にします。<br />デフォルトでは <code>false</code> です。<br />詳細は不明です。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:26">emptySessionPath
+</a></dt><dd><p><p><code>true</code> にすると、セッション（クッキー）のパスを全て「/」 にセットします。<br />効能は不明です。<br />デフォルトでは <code>false</code> です。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:28">enableLookups
+</a></dt><dd><p><p>DNSルックアップを利用するかどうかを指定します。<br />これを利用するとサーブレットコンテナのパフォーマンスが落ちるので<br />なるべくならfalseにしましょう。<br /><strong>Tomcat5では、デフォルト値がtrueに変更されています！</strong><br /></p>
+</p></dd></dl><dl><dt><a name="limy:30">maxPostSize
+</a></dt><dd><p><p>フォームからPOSTできる最大サイズをbyte単位で指定します。<br />デフォルトは2M(2097152)です。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:32">protocol
+</a></dt><dd><p><p>HTTPのプロトコルを指定します。デフォルトではHTTP/1.1です。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:34">proxyName
+</a></dt><dd><p><p>このコネクタがプロキシを利用する場合、そのプロキシのサーバ名を記述します。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:36">proxyPort
+</a></dt><dd><p><p>このコネクタがプロキシを利用する場合、そのプロキシのポート番号を記述します。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:38">redirectPort
+</a></dt><dd><p><p>リダイレクトに使用するポート番号を指定します。<br />詳細は不明です。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:40">scheme
+</a></dt><dd><p><p><code>request.getScheme()</code> 呼び出しで返されるスキーマ文字列を定義します。<br />デフォルトでは <code>http</code> です。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:42">secure
+</a></dt><dd><p><p><code>request.isSecure()</code> 呼び出しで返されるセキュア情報(boolean値)を定義します。<br />デフォルトでは <code>false</code> です。<br />SSLを使用する場合にはtrueを指定して下さい。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:44">URIEncoding
+</a></dt><dd><p><p>「http://contents?a=%12%34」形式で記述されたURLをデコードする際の<br />文字エンコーディングを指定します。デフォルトは「ISO-8859-1」です。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:46">useBodyEncodingForURI
+</a></dt><dd><p><p>Tomcat4.1.x系との互換性の為に使用されます。<br />デフォルトは <code>false</code> ですが、互換を保つには <code>true</code> を指定して下さい。<br /><code>true</code> にすると、ContentType又はRequest.setCharacterEncodingメソッドで指定された<br />エンコーディングをデコードに使用します。<a href="sample.html#limy:45">URIEncoding</a>は使われません。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:48">xpoweredBy
+</a></dt><dd><p><p>詳細は不明です。<br /></p>
+</p></dd></dl><a name="limy:50"></a><h3>CoyoteConnector
+</h3>
+<p>デフォルトのHTTP Connectorを使用する際には、以下の属性が使用できます。<br /></p>
+<dl><dt><a name="limy:52">acceptCount
+</a></dt><dd><p><p>このサーバへの接続要求キューのサイズを指定します。<br />この値を超えて要求された全てのリクエストは拒否されます。<br />デフォルトは 10 です。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:54">address
+</a></dt><dd><p><p>このServer(ポート)を受け付けるIPアドレスを指定します。<br />省略すると、全てのIPアドレスはこのServerに関連付けられます。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:56">bufferSize
+</a></dt><dd><p><p>このコネクタが入力ストリームとして生成するバッファサイズをbyte単位で指定します。<br />デフォルトは2048bytesです。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:58">compressableMimeTypes
+</a></dt><dd><p><p>後述の <a href="sample.html#limy:61">compression</a> で圧縮するMIMEタイプをカンマ区切りで記述します。<br />デフォルトは、<code>text/html,text/xml,text/plain</code> です。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:60">compression
+</a></dt><dd><p><p>HTTP1/1のGZIP圧縮を利用するかどうかを指定します。<br />on、off(デフォルト)、forceあるいは正整数を記述できます。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:62">connectionLinger
+</a></dt><dd><p><p>詳細は不明です。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:64">connectionTimeout
+</a></dt><dd><p><p>この接続のタイムアウト値をミリ秒単位で指定します。<br />デフォルトは60000(60秒)です。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:66">disableUploadTimeout
+</a></dt><dd><p><p>詳細は不明です。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:68">maxKeepAliveRequests
+</a></dt><dd><p><p><code>keep-alive</code> の数を指定します。<br />詳しくはApacheのドキュメント等を参考にして下さい。<br />デフォルトは100です。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:70">maxSpareThreads
+</a></dt><dd><p><p>スレッドプールに存在できるスペア・スレッドの最大数を指定します。<br />詳しくはApacheのドキュメント等を参考にして下さい。<br />デフォルトは50です。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:72">maxThreads
+</a></dt><dd><p><p>リクエスト処理スレッドの最大数を指定します。<br />詳しくはApacheのドキュメント等を参考にして下さい。<br />デフォルトは200です。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:74">minSpareThreads
+</a></dt><dd><p><p>スレッドプールに存在するスペア・スレッドの最低数を指定します。<br />詳しくはApacheのドキュメント等を参考にして下さい。<br />デフォルトは4です。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:76">noCompressionUserAgents
+</a></dt><dd><p><p>GZIP圧縮を利用しないユーザーエージェント名を記述します。<br />正規表現が利用でき、複数指定時にはカンマで区切ります。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:78">port
+</a></dt><dd><p><p>このコネクタが使用するポート番号を指定します。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:80">restrictedUserAgents
+</a></dt><dd><p><p><code>keep-alive</code> を使用しないユーザエージェント一覧を正規表現（カンマ区切り）で指定します。<br />携帯端末などを指定しておくと良いでしょう。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:82">server
+</a></dt><dd><p><p>HTTPレスポンスの「Server」ヘッダを指定します。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:84">socketBuffer
+</a></dt><dd><p><p>ソケットの出力バッファサイズ（byte単位）を指定します。-1にするとバッファを使用しません。<br />デフォルトは9000です。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:86">strategy
+</a></dt><dd><p><p>スレッドプーリング方法を指定します。<br />詳細は不明です。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:88">tcpNoDelay
+</a></dt><dd><p><p>true(デフォルト)にすると、このコネクタが利用するソケットにオプションを適用します。<br />詳しくはJava APIドキュメントの <code>java.net.SocketOptions.TCP_NODELAY</code> を参考にして下さい。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:90">threadPriority
+</a></dt><dd><p><p>リクエスト処理を行うプロセスのスレッド優先順位を指定します。<br />デフォルトでは <code>java.lang.Thread#NORM_PRIORITY</code> です。<br /></p>
+</p></dd></dl><a name="limy:92"></a><h4>SSL
+</h4>
+<p>このコネクタをSSL接続にしたい場合は、<a href="sample.html#limy:43">secure</a>をtrueに指定します。<br />それに加え、以下の属性を<a href="sample.html#limy:23">Connector</a>要素に追記することが出来ます。<br /></p>
+<dl><dt><a name="limy:94">algorithm
+</a></dt><dd><p><p>証明書の符号化アルゴリズムを指定します。<br />デフォルトはSunX509です。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:96">clientAuth
+</a></dt><dd><p><p>詳細は不明です。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:98">keystoreFile
+</a></dt><dd><p><p>SSL認証に使用するkeystoreファイルのパスを指定します。<br />デフォルトでは、Tomcatを起動したユーザのホームディレクトリ内にある<br />".keystore"ファイルが利用されます。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:100">keystorePass
+</a></dt><dd><p><p>SSL認証に使用するkeystoreのパスワードを記述します。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:102">keystoreType
+</a></dt><dd><p><p>SSL認証に使用するkeystoreファイルの種類を記述します。<br />デフォルトは"JKS"です。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:104">sslProtocol
+</a></dt><dd><p><p>使用するSSLプロトコルのバージョンを指定します。<br />デフォルトは"TLS"です。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:106">ciphers
+</a></dt><dd><p><p>詳細は不明です。<br /></p>
+</p></dd></dl><a name="limy:108"></a><h2>GlobalNamingResources
+</h2>
+<p>親要素 : <a href="sample.html#limy:6">Server</a><br />このサーバに共通で使用されるリソースを指定します。<br />3種類の子要素を持つことができます。<br /></p>
+<a name="limy:110"></a><h3>Environment
+</h3>
+<p>環境変数を定義します。利用する際にはJNDIを使います。<br /></p>
+<dl><dt><a name="limy:112">description
+</a></dt><dd><p><p>この環境変数に関する情報を記述します。<br />これはサーバに全く関与しない、あくまでこの設定ファイルを読む他の人間に対する記述です。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:114">name
+</a></dt><dd><p><p>この環境変数を登録するJNDI名を記述します。<br />実際に登録されるJNDI名は、<code>java:comp/env</code> + name となります。<br />例えば、<code>maxLen</code> という名前の環境変数を利用する場合には<br />プログラム内には<code>lookup("java:comp/env/manLen")</code>と記述します。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:116">override
+</a></dt><dd><p><p>trueにすると、この環境変数と同名の変数が<br />各アプリケーションのweb.xml内で記述されていた場合にそれを上書きします。<br />デフォルトはtrueです。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:118">type
+</a></dt><dd><p><p>この環境変数のクラス名を完全限定名で指定します。<br />指定できるクラスは、Javaプリミティブ型のラップクラスとStringのみです。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:120">value
+</a></dt><dd><p><p>この環境変数に割り当てる値を記述します。<br /></p>
+</p></dd></dl><a name="limy:122"></a><h3>Resource
+</h3>
+<p>一般的なリソースを定義します。<br /></p>
+<dl><dt><a name="limy:124">auth
+</a></dt><dd><p><p>Application または Container を記述します。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:126">description
+</a></dt><dd><p><p>このリソースに関する情報を記述します。<br />これはサーバに全く関与しない、あくまでこの設定ファイルを読む他の人間に対する記述です。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:128">name
+</a></dt><dd><p><p>このリソースを登録するJNDI名を記述します。<br />実際に登録されるJNDI名は、<code>java:comp/env</code> + name となります。<br />例えば、<code>UserDataBase</code> という名前の環境変数を利用する場合には<br />プログラム内には<code>lookup("java:comp/env/UserDataBase")</code>と記述します。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:130">scope
+</a></dt><dd><p><p>リソースマネージャから得たこのリソースの接続を共有するかどうかを指定します。<br />Shareable(デフォルト) または Unshareable を記述します。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:132">type
+</a></dt><dd><p><p>このリソースのクラス名を完全限定名で指定します。<br /></p>
+</p></dd></dl><p>Tomcat5.5では、リソースの記述方法が変わっています。<br />そのため、以前の設定ファイルをそのまま利用することが出来ません。<br /></p>
+<p><a class="externalLink" title="External Link" href="http://jakarta.apache.org/tomcat/tomcat-5.5-doc/jndi-datasource-examples-howto.html">JNDI Datasource HOW-TO</a><br /></p>
+<p>具体的には、以前まであった <code>ResourceParams</code> 要素が無くなっています。<br />以前までここに記述していた内容は、<code>Resource</code> 要素の属性として記述する必要があります。<br /></p>
+<a name="limy:137"></a><h2>Engine
+</h2>
+<p>親要素 : <a href="sample.html#limy:16">Service</a><br />サーブレットエンジンコンテナの情報を記述します。<br />エンジンコンテナは、一つもしくはそれ以上のコネクタからのリクエストを受け取り<br />レスポンスを返します。<br /></p>
+<dl><dt><a name="limy:139">backgroundProcessorDelay
+</a></dt><dd><p><p>詳細は不明です。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:141">className
+</a></dt><dd><p><p>使用するエンジンクラスを指定します。<br />このクラスは <code>org.apache.catalina.Engine</code> インターフェイスを実装している必要があります。<br />省略すると、<code>org.apache.catalina.core.StandardEngine</code> がデフォルトで使用されます。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:143">defaultHost
+</a></dt><dd><p><p>デフォルトのホスト名を記述します。<br />これは、このエンジンの子に存在する<a href="sample.html#limy:153">Host</a>要素のname属性に対応させる必要があります。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:145">jvmRoute
+</a></dt><dd><p><p>ロード・バランシング(負荷分散)機能を利用するときに使います。<br />この機能はJK/JK2インターフェイスを使ってApacheと連携を取っている状況下で働きます。<br />詳細は不明ですが、おそらく異なるEngineに異なるjvmRoute属性を記述すれば良いはずです。<br />jvmRoute属性文字列は識別子となり、セッションIDのサフィックス等にも使われます。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:147">name
+</a></dt><dd><p><p>このエンジンに付ける名前を記述します。<br /></p>
+</p></dd></dl><p>子要素 : <a href="sample.html#limy:153">Host</a> / <a href="sample.html#limy:357">Realm</a> / <strong>!!DefaultContext!!</strong><br />一つ以上のHost要素が必須となります。<br /></p>
+<a name="limy:150"></a><h3>ログについて
+</h3>
+<p>Tomcat5.5より前のTomcatでは、ログ出力は <code>debug</code> 属性により制御していました。<br />Tomcat5.5では、ログ出力は <code>log4j</code> により制御されます。<br />このエンジンに対する全てのログ出力は、<br /><code>org.apache.catalina.core.ContainerBase.[エンジン名]</code> カテゴリ以下に出力されます。<br /></p>
+<a name="limy:152"></a><h2>Host
+</h2>
+<p>親要素 : <a href="sample.html#limy:138">Engine</a><br />バーチャルホストを定義します。<br /></p>
+<dl><dt><a name="limy:154">appBase
+</a></dt><dd><p><p>このバーチャルホストの基準ディレクトリを指定します。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:156">autoDeploy
+</a></dt><dd><p><p>true（デフォルト）にすると、Tomcat起動中に <a href="sample.html#limy:155">appBase</a> ディレクトリに<br />Webアプリケーションを配置すると、自動的にデプロイされます。<br />詳しくは <a href="sample.html#limy:179">オートデプロイ</a> を参照して下さい。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:158">backgroundProcessorDelay
+</a></dt><dd><p><p>詳細は不明です。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:160">className
+</a></dt><dd><p><p>使用するホストのクラスを指定します。<br />このクラスは <code>org.apache.catalina.Host</code> インターフェイスを実装している必要があります。<br />省略すると、<code>org.apache.catalina.core.StandardHost</code> がデフォルトで使用されます。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:162">deployOnStartup
+</a></dt><dd><p><p>Tomcat起動時に <a href="sample.html#limy:179">オートデプロイ</a> を行うかどうかを指定します。<br />デフォルトはtrueです。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:164">name
+</a></dt><dd><p><p>このバーチャルホストが利用されるネットワーク名を指定します。<br />ネットワーク名とはDNSサーバに登録されているものを指定するか <code>localhost</code> と記述する必要があります。<br /></p>
+</p></dd></dl><a name="limy:166"></a><h3>StandardHost
+</h3>
+<p>以下、<code>org.apache.catalina.core.StandardHost</code> を使用した場合に使用できる属性を説明します。<br /></p>
+<dl><dt><a name="limy:168">deployXML
+</a></dt><dd><p><p><a href="sample.html#limy:179">オートデプロイ</a>時にXMLファイルの読み込みを行うかどうかを指定します。<br />デフォルトはtrueです。falseにすると<br /><code>$CATALINA_HOME/conf/[engine_name]/[host_name]</code> ディレクトリ以外にある<br />warファイルの手動インストールも不可能になります。<br /></p>
+</p></dd><dd><p><p>つまり、<code>$CATALINA_HOME/conf/[engine_name]/[host_name]</code> ディレクトリと<br />そのサブディレクトリ以外にあるファイルが<br />一切使えないようになるので、セキュリティの面で安全性が高まります。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:171">errorReportValveClass
+</a></dt><dd><p><p>このホストでエラーが発生した場合、それを画面に出力する為のクラスを指定します。<br />このクラスは <code>org.apache.catalina.Valve</code> インターフェイスを実装している必要があります。<br />デフォルトでは <code>org.apache.catalina.valves.ErrorReportValve</code> が使用されます。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:173">unpackWARs
+</a></dt><dd><p><p><a href="sample.html#limy:155">appBase</a> ディレクトリ上に配置したWARファイルを<br />このディレクトリ上に展開(解凍)するかどうかを指定します。<br />false にすると、配置されたWARファイルはそのままの形で実行されます。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:175">workDir
+</a></dt><dd><p><p>このホストが一時的に利用するディレクトリを指定します。<br />コンテキスト毎に指定する場合は、Context要素のworkDir属性を記述すれば<br />この値は上書きされます。<br />省略すると、<code>$CATALINA_HOME/work</code> がデフォルトで使用されます。<br /></p>
+</p></dd></dl><p>子要素 : <a href="sample.html#limy:357">Realm</a> / <a href="sample.html#limy:368">Valve</a> / <a href="sample.html#limy:187">Context</a><br /></p>
+<a name="limy:178"></a><h3>オートデプロイ
+</h3>
+<p>Catalinaを起動した際、autoDeploy属性がtrueならばオートデプロイ機能が働きます。<br />以下の3項目がその処理内容です。<br />これらはホスト毎のappBase属性を基準として行なわれます。<br /></p>
+<ol><li><p><a name="limy:180">XMLファイルの読み込み
+</p></a><p><a href="sample.html#limy:163">deployOnStartup</a>属性がtrue(デフォルト)の場合に以下の処理が働きます。<br /><code>$CATALINA_HOME/conf/[engine_name]/[host_name]</code> 上にある<br />全てのXMLファイルが読み込まれます。<br />このファイルにはContext要素(とその子要素)を記述できます。<br />こうやって <code>conf/server.xml</code> から分離して別ファイルに記述することで<br />各コンテキストを一時的に利用可能／不可能にする事が簡単に行えるようになります。<br /></p>
+</li><li><p><a name="limy:182">WARファイルの読み込みと展開
+</p></a><p><code>$CATALINA_HOME/conf/[engine_name]/[host_name]</code> 上にある全てのWARファイルを<br />そのファイル名から拡張子.warを取り除いた名前のコンテキストとして認識します。<br />さらに、<a href="sample.html#limy:174">unpackWARs</a>属性がtrueの場合は同名のディレクトリを作成してWARファイルを展開します。<br />ただし、既に同名のディレクトリが存在する場合には展開はされません。<br /></p>
+</li><li><p><a name="limy:184">サブディレクトリの自動コンテキスト設定
+</p></a><p>appBase上にある全てのサブディレクトリ(WARファイルを解凍したものを除く)は、<br />それに関するContext要素が自動的に作成されます。<br />ただし、これらのサブディレクトリ内に WEB-INF/web.xml ファイルが存在しているものに限ります。<br />これらのコンテキストには <strong>!!DefaultContext!!</strong> の属性が適用されます。<br />コンテキストパスは <code>/dir_name</code> という形式になりますが、<br />唯一例外として <code>ROOT</code> という名前のディレクトリはこのホストのルートコンテキストとして設定されます。<br /></p>
+</li></ol><a name="limy:186"></a><h2>Context
+</h2>
+<p>親要素 : <a href="sample.html#limy:153">Host</a><br />Webアプリケーション単位のコンテキスト設定を記述します。<br /><a href="sample.html#limy:179">オートデプロイ</a>を利用することにより、この要素は別ファイルに分けることが出来ます。<br />コンテキスト(アプリケーション)毎に設定ファイルを用意することができるので便利です。<br /></p>
+<dl><dt><a name="limy:188">backgroundProcessorDelay
+</a></dt><dd><p><p>不明です。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:190">className
+</a></dt><dd><p><p>使用するコンテキストクラスを指定します。<br />このクラスは <code>org.apache.catalina.Context</code> インターフェイスを実装している必要があります。<br />省略すると、<code>org.apache.catalina.core.StandardContext</code> がデフォルトで使用されます。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:192">cookies
+</a></dt><dd><p><p>アプリケーションがセッションを識別するのに<br />クッキーを使用するかどうかを指定します。デフォルトでは true です。<br />false にすると、URLにセッションIDを埋め込む形でしかセッションを利用できなくなります。<br />これは携帯サイトなどクッキーを利用できないブラウザでは必要な手段となります。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:194">crossContext
+</a></dt><dd><p><p>このコンテキストを他のコンテキストから参照できるかどうかを指定します。<br />true にすると、他のコンテキストから <code>ServletContext.getContext(String)</code> メソッドを<br />呼び出すことによって <code>ServletContext</code> オブジェクトを取得することが出来ます。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:196">docBase
+</a></dt><dd><p><p>このコンテキストのルートディレクトリを指定します。<br />WARファイルを指定することも出来ます。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:198">override
+</a></dt><dd><p><p>true にすると、各属性は <strong>!!DefaultContext!!</strong>要素の属性を(もしあれば)上書きします。<br />false(デフォルト)では、<strong>!!DefaultContext!!</strong>要素の属性が(もしあれば)そのまま使われます。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:200">privileged
+</a></dt><dd><p><p>このWebアプリケーションに特権を与えるかどうかを指定します。<br />true にすると、コンテナ・サーブレットを使うことが可能になります。<br />コンテナ・サーブレットとは、<code>org.apache.catalina.ContainerServlet</code>インターフェイスを<br />実装したサーブレットの事を指します。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:202">path
+</a></dt><dd><p><p>このコンテキストに対応するURIを記述します。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:204">reloadable
+</a></dt><dd><p><p>true にすると、Catalina は <code>/WEB-INF/classes/</code> と <code>/WEB-INF/lib/</code> に存在するファイルの内容を<br />随時チェックし、変更があった場合にはそれをリロードします。<br />この機能はサーブレットのデバッグ時には大変便利ですが、その為にかなりのオーバーヘッドを要します。<br />実運用段階では、この項目は必ず false にすることを推奨します。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:206">wrapperClass
+</a></dt><dd><p><p>使用するラッパークラスを指定します。<br />このクラスは <code>org.apache.catalina.Wrapper</code> インターフェイスを実装している必要があります。<br />省略すると、<code>org.apache.catalina.core.StandardWrapper</code> がデフォルトで使用されます。<br /><br /></p>
+</p></dd></dl><a name="limy:208"></a><h3>StandardContext
+</h3>
+<p>以下、<code>org.apache.catalina.core.StandardContext</code> を使用した場合に使用できる属性を説明します。<br /></p>
+<dl><dt><a name="limy:210">allowLinking
+</a></dt><dd><p><p><code>true</code> にすると、シンボリックリンクが使用可能になります。<br />デフォルトは <code>false</code> です。<br /><strong>Windows等、ファイル名の大小文字を区別しないシステムでは必ずfalseにして下さい！</strong><br /></p>
+</p></dd></dl><dl><dt><a name="limy:212">antiJARLocking
+</a></dt><dd><p><p><code>true</code> にすると、TomcatのクラスローダはJARファイルをロックしなくなります。<br />これにより、アプリケーションの起動時間は遅くなりますが<br />ファイルがロックされてしまう環境では有用であるかもしれません。<br />デフォルトは <code>false</code> です。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:214">antiResourceLocking
+</a></dt><dd><p><p><code>true</code> にすると、Tomcatは全てのファイルをロックしなくなります。<br />これにより、アプリケーションの起動時間は著しく遅くなりますが<br />いかなる環境においてもアプリケーションの完全なホットデプロイが可能になります。<br />デフォルトは <code>false</code> です。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:216">cacheMaxSize
+</a></dt><dd><p><p>画像などの静的リソースをキャッシュするバッファのサイズをキロバイト単位で指定します。<br />デフォルトは10240（10MB）です。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:218">cacheTTL
+</a></dt><dd><p><p>キャッシュされたファイルが変更されたかどうかをチェックする間隔をミリ秒単位で指定します。<br />デフォルトは5000（5秒）です。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:220">cachingAllowed
+</a></dt><dd><p><p>静的リソースをキャッシュするかどうかを指定します。<br />デフォルトでは <code>true</code> です。<br /><br /></p>
+</p></dd></dl><dl><dt><a name="limy:222">caseSensitive
+</a></dt><dd><p><p><code>true</code> にすると、文字列の大小文字チェックを無効にします。<br />デフォルトは <code>true</code> です。<br /><strong>Windows等、ファイル名の大小文字を区別しないシステムでは必ずtrueにして下さい！</strong><br /></p>
+</p></dd></dl><dl><dt><a name="limy:224">processTlds
+</a></dt><dd><p><p>詳細は不明です。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:226">swallowOutput
+</a></dt><dd><p><p><code>true</code> にすると、標準出力およびエラー出力(System.out,err)への出力が全て<br />アプリケーションのロガーに渡されます。デフォルトは <code>false</code> です。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:228">tldNamespaceAware
+</a></dt><dd><p><p><code>true</code> にすると、TLDファイルのXML検証時に名前空間の概念が適用されます。<br />そのため、アプリケーションの起動時間は遅くなります。<br />デフォルトは <code>false</code> です。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:230">tldValidation
+</a></dt><dd><p><p><code>true</code> にすると、TLDファイルのXML検証が行われます。<br />そのため、アプリケーションの起動時間は遅くなります。<br />デフォルトは <code>false</code> です。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:232">unpackWAR
+</a></dt><dd><p><p><code>true</code> にすると、このアプリケーションがWARファイルで提供されたときに<br />TomcatがWARファイルを展開します。<br />デフォルトは <code>true</code> です。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:234">useNaming
+</a></dt><dd><p><p><code>true</code> にすると、CatalinaはJNDIのInitialContextを利用可能にします。<br />デフォルトは <code>true</code> です。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:236">workDir
+</a></dt><dd><p><p>このコンテキストが一時的に利用するディレクトリを指定します。<br />省略すると、<code>$CATALINA_HOME/work</code> がデフォルトで使用されます。<br /></p>
+</p></dd></dl><p>子要素 : Loader / <a href="sample.html#limy:258">Manager</a> / <a href="sample.html#limy:357">Realm</a> / <a href="sample.html#limy:366">Resources</a> / <a href="sample.html#limy:240">Parameter</a> / <a href="sample.html#limy:111">Environment</a> / <a href="sample.html#limy:123">Resource</a> / <strong>!!ResourceParams!!</strong> / <a href="sample.html#limy:250">ResourceLink</a><br /></p>
+<a name="limy:239"></a><h3>Parameter
+</h3>
+<p>このコンテキストで利用できるパラメータを宣言します。<br />これは <a href="web_xml.html">web.xml</a> 内の <strong>!!context-param!!</strong>要素で宣言するのと同一の効果があります。<br />アプリケーション内でパラメータを取得するには、<code>ServletContext.getInitParameter()</code>を使用します。<br /></p>
+<dl><dt><a name="limy:241">description
+</a></dt><dd><p><p>このパラメータに関する情報を記述します。<br />これはサーバに全く関与しない、あくまでこのファイルを読む他の人間に対する記述です。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:243">name
+</a></dt><dd><p><p>このパラメータの名前を記述します。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:245">override
+</a></dt><dd><p><p>これと同じ名前のパラメータが <a href="web_xml.html">web.xml</a> 内で見つかったとき、<br />その値を上書きするかどうかを指定します。デフォルトは true です。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:247">value
+</a></dt><dd><p><p>このパラメータの値を記述します。<br /></p>
+</p></dd></dl><a name="limy:249"></a><h3>ResourceLink
+</h3>
+<p>グローバルリソースをアクセスする為の記述をします。<br /></p>
+<dl><dt><a name="limy:251">global
+</a></dt><dd><p><p>グローバルリソース名<br /></p>
+</p></dd></dl><dl><dt><a name="limy:253">name
+</a></dt><dd><p><p>リソースをアクセスする際のJNDI名。これは <code>java:comp/env/</code> からの相対名になります。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:255">type
+</a></dt><dd><p><p>リソースのタイプ(クラス)名<br /></p>
+</p></dd></dl><a name="limy:257"></a><h2>Manager
+</h2>
+<p>親要素 : <a href="sample.html#limy:187">Context</a><br />HTTPセッションを生成、確保する為のセッションマネージャの設定をします。<br /></p>
+<dl><dt><a name="limy:259">className
+</a></dt><dd><p><p>使用するコンテキストクラスを指定します。<br />このクラスは <code>org.apache.catalina.Manager</code> インターフェイスを実装している必要があります。<br />省略すると、<code>org.apache.catalina.session.StandardManager</code> がデフォルトで使用されます。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:261">distributable
+</a></dt><dd><p><p>アプリケーションが使用するセッションオブジェクトが<br />全て直列化可能なことを示すときにtrueにします。<br />デフォルトは <code>false</code> です。<br /><code>true</code> のとき、直列化不可能(<code>Serializable</code>)なオブジェクトを<br />セッションに格納しようとすると <code>IllegalArgumentException</code> が発生します。<br /></p>
+</p></dd><dd><p><p>Tomcatのクラスタリング機能を有効にするとき、この値は <code>true</code> にする必要があります。<br />もしくは、アプリケーション毎に <code>distributable</code> 属性を指定します。<br /></p>
+</p></dd></dl><a name="limy:264"></a><h3>StandardManager
+</h3>
+<p>以下、<code>org.apache.catalina.session.StandardManager</code> を使用した場合に使用できる属性を説明します。<br /></p>
+<dl><dt><a name="limy:266">algorithm
+</a></dt><dd><p><p>セッション識別子を計算するアルゴリズムを指定します。<br />この値は <code>java.security.MessageDigest</code> クラスでサポートされている必要があります。<br />デフォルトは <code>MD5</code> です。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:268">entropy
+</a></dt><dd><p><p>セッション識別子生成時に用いられる乱数生成メソッドに渡す文字列を指定します。<br />デフォルトでもある程度有用なセッション識別子は生成されますが、<br />セキュリティが重要な環境下で使用する場合には<br />ここで明示的に何らかの文字列を指定する方がより強固な(他人に利用されにくい)識別子が生成されます。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:270">maxActiveSessions
+</a></dt><dd><p><p>マネージャによって生成されるアクティブ・セッションの最大数を制限します。<br />-1(デフォルト)にすると、セッションは無制限に生成されます。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:272">maxInactiveInterval
+</a></dt><dd><p><p>詳細は不明です。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:274">pathname
+</a></dt><dd><p><p>アプリケーション再起動時に保存されるセッション状態を記述したファイルがあります。<br />デフォルトでは <code>workDir/SESSIONS.ser</code> ですが、<br />ここではそのファイル名およびパスを指定する事が出来ます。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:276">processExpiresFrequency
+</a></dt><dd><p><p>詳細は不明です。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:278">randomClass
+</a></dt><dd><p><p>使用する乱数生成クラスを指定します。<br />このクラスは <code>java.util.Random</code> インターフェイスを実装している必要があります。<br />省略すると、<code>java.security.SecureRancom</code> がデフォルトで使用されます。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:280">sessionIdLength
+</a></dt><dd><p><p>生成されるセッションIDの長さを指定します。<br />デフォルトは <code>16</code> です。<br /></p>
+</p></dd></dl><a name="limy:282"></a><h3>PersistentManager
+</h3>
+<p>以下、<code>org.apache.catalina.session.PersistentManager</code> を使用した場合に使用できる属性を説明します。<br />このマネージャを利用すると、セッションのスワップ管理を制御することができます。<br />※ このマネージャはまだテスト段階です<br /></p>
+<p>概要を説明します。<br />基本的に作成されたセッションはメモリ内に保持されますが、<br />数が多くなってくるとメモリ使用量も圧迫されます。<br /></p>
+<p>そこで、一定期間使われていないセッションをストア(ファイルやDBレコード)に保管して<br />メモリから破棄する処理を行います。これをスワップアウトといいます。<br />また、オブジェクトの破棄は行わずストアへの保管だけを行うことをバックアップといいます。<br /></p>
+<p>ストアに保管する際にはJavaのオブジェクトを直列化するので<br />セッションに利用するオブジェクトは<code>Serializable</code>インターフェイスを実装する必要があります。<br />具体的には、<br /></p>
+<pre>session.setAttribute(name, value);
+</pre>
+<p>としたときに、valueオブジェクトが<code>Serializable</code>インターフェイスを実装していないと<br />例外が発生します。<br /></p>
+<p>このマネージャを利用すると、以下の処理が <a href="sample.html#limy:326">checkInterval</a> 秒ごとに行われます。<br /></p>
+<ul><li><p><a name="limy:290">一定時間使われていないセッションを破棄します。
+</a></p><p>このときのタイムアウト値はweb.xmlの<strong>!!session-timeout!!</strong>要素で指定されます。<br /></p>
+</ul><ul><li><p><a name="limy:292"><a href="sample.html#limy:293">maxIdleSwap</a>秒以上使われていないセッションをスワップアウトします。
+</a></p></ul><ul><li><p><a name="limy:293"><a href="sample.html#limy:271">maxActiveSessions</a>個を超えたセッションのうち、
+</a></p><p><a href="sample.html#limy:310">minIdleSwap</a>秒以上使われていないものをスワップアウトします。<br /></p>
+</ul><ul><li><p><a name="limy:295"><a href="sample.html#limy:296">maxIdleBackup</a>秒以上使われていないセッションをバックアップします。
+</a></p></ul><p>以下、PersistentManager要素に指定できる属性を列挙します。<br /></p>
+<dl><dt><a name="limy:297">algorithm
+</a></dt><dd><p><p>セッション識別子を計算するアルゴリズムを指定します。<br />この値は <code>java.security.MessageDigest</code> クラスでサポートされている必要があります。<br />デフォルトは <code>MD5</code> です。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:299">className
+</a></dt><dd><p><p>使用するPersistentManagerクラスを指定します。<br />このクラスは <code>org.apache.catalina.Manager</code> インターフェイスを実装している必要があります。<br /><code>org.apache.catalina.session.PersistentManager</code> を指定して下さい。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:301">entropy
+</a></dt><dd><p><p>セッション識別子生成時に用いられる乱数生成メソッドに渡す文字列を指定します。<br />デフォルトでもある程度有用なセッション識別子は生成されますが、<br />セキュリティが重要な環境下で使用する場合には<br />ここで明示的に何らかの文字列を指定する方がより強固な(他人に利用されにくい)識別子が生成されます。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:303">randomClass
+</a></dt><dd><p><p>使用する乱数生成クラスを指定します。<br />このクラスは <code>java.util.Random</code> インターフェイスを実装している必要があります。<br />省略すると、<code>java.security.SecureRancom</code> がデフォルトで使用されます。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:305">saveOnRestart
+</a></dt><dd><p><p>これをtrue(デフォルト)にすると、全ての有効なセッションは<br />Catalinaサーバ終了時にスワップアウトされ保管されます。<br />保管された全てのセッションは、次回のサーバスタート時にメモリにロードされます。<br />つまり、サーバを再起動してもセッションは無効になりません。<br />これはアプリケーションの停止／開始や再起動時にも同じように働きます。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:307">maxActiveSessions
+</a></dt><dd><p><p>メモリ内に保持できるセッションの最大数を制限します。<br />-1(デフォルト)にすると、セッションは無制限に生成されます。<br />この値を超えるセッションを生成しようとするとIllegalStateExceptionが発生します。<br />このときに独自の画面を表示させたいなら、web.xmlの<strong>!!error-page!!</strong>要素を記述して下さい。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:309">minIdleSwap
+</a></dt><dd><p><p>セッションは最大数<a href="sample.html#limy:271">maxActiveSessions</a>を超えると<br />超えた分のセッションがスワップアウトされますが、<br />少なくともこの秒数を超える期間使われない限りはスワップアウトの対象になりません。<br />スワップアウトされたセッションに再度接続要求が来ると、<br />Catalinaはセッションをスワップインして利用することになります。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:311">maxIdleSwap
+</a></dt><dd><p><p>セッションが最後に使われてからスワップアウトされるまでの時間を秒単位で指定します。<br /><a href="sample.html#limy:310">minIdleSwap</a>がこの値より大きい場合、この値は<a href="sample.html#limy:310">minIdleSwap</a>で上書きされます。<br />-1にすると全てのセッションはスワップアウトされません。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:313">maxIdleBackup
+</a></dt><dd><p><p>セッションが最後に使われてからバックアップされるまでの時間を秒単位で指定します。<br />バックアップはスワップアウトと似ていますが、こちらはメモリからセッションを削除しません。<br />-1にすると、セッションはバックアップされません。<br /></p>
+</p></dd><dd><p><p>処理内容は似ていますが、使用目的はスワップアウトとは異なるはずです。<br />スワップアウトはメモリ使用量を抑える目的で使われるのに対し、<br />バックアップはセッションを記憶領域に保管してログのような目的で使われるのだと思います。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:316">maxInactiveInterval
+</a></dt><dd><p><p>詳細は不明です。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:318">sessionIdLength
+</a></dt><dd><p><p>生成されるセッションIDの長さを指定します。<br />デフォルトは <code>16</code> です。<br /></p>
+</p></dd></dl><p>スワップアウトされたセッションはストアと呼ばれる場所に保管されます。<br />ストアの指定は、Manager要素の子要素Storeに必ず指定しなければなりません。<br /></p>
+<a name="limy:321"></a><h4>File Based Store
+</h4>
+<p>ファイルベースのストアを使う場合は、以下の属性をStore要素に付加します。<br /></p>
+<dl><dt><a name="limy:323">className
+</a></dt><dd><p><p><code>org.apache.catalina.session.FileStore</code> を記述します。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:325">checkInterval
+</a></dt><dd><p><p>ストアに保管されたセッションが切断されたかどうかのチェックを行う間隔を<br />秒単位で指定します(デフォルトは60秒)。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:327">directory
+</a></dt><dd><p><p>セッションを保管するディレクトリを指定します。<br />相対パスで記述した場合、その基準ディレクトリはworkディレクトリになります。<br /></p>
+</p></dd></dl><a name="limy:329"></a><h4>JDBC Based Store
+</h4>
+<p>JDBC経由でデータベースをストアとして使う場合は、以下の属性をStore要素に付加します。<br /></p>
+<dl><dt><a name="limy:331">className
+</a></dt><dd><p><p><code>org.apache.catalina.session.JDBCStore</code> を記述します。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:333">checkInterval
+</a></dt><dd><p><p>ストアに保管されたセッションが切断されたかどうかのチェックを行う間隔を<br />秒単位で指定します(デフォルトは60秒)。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:335">driverName
+</a></dt><dd><p><p>使用するJDBCドライバのクラス名を記述します。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:337">connectionURL
+</a></dt><dd><p><p>データベースにJDBC接続するためのURLを記述します。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:339">sessionTable
+</a></dt><dd><p><p>ストアに利用するデータベースのテーブル名を記述します。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:341">sessionIdCol
+</a></dt><dd><p><p>「セッションID」を書き出すデータベースのカラム名を記述します。<br />DBのカラムは可変文字列型にします。例： VARCHAR(100) NOT NULL PRIMARY KEY<br /></p>
+</p></dd></dl><dl><dt><a name="limy:343">sessionAppCol
+</a></dt><dd><p><p>「セッションアプリケーション名」を書き出すデータベースのカラム名を記述します。<br />これは「エンジン名/ホスト名/アプリケーション名」の形式になります。<br />DBのカラムは可変文字列型にします。例： VARCHAR(255)<br /></p>
+</p></dd></dl><dl><dt><a name="limy:345">sessionDataCol
+</a></dt><dd><p><p>「セッションデータ」を書き出すデータベースのカラム名を記述します。<br />DBのカラムはBLOB型にします。例：MEDIUMBLOB<br /></p>
+</p></dd></dl><dl><dt><a name="limy:347">sessionLastAccessedCol
+</a></dt><dd><p><p>「最終アクセス日付」を書き出すデータベースのカラム名を記述します。<br />DBのカラムは数値型(64bit)にします。例： BIGINT NOT NULL<br /></p>
+</p></dd></dl><dl><dt><a name="limy:349">sessionMaxInactiveCol
+</a></dt><dd><p><p>「セッションタイムアウト値(秒)」を書き出すデータベースのカラム名を記述します。<br />「現在日付 &gt; 最終アクセス日付 + タイムアウト値」になった時点で<br />このセッションは切断(DBからも削除)されます。<br />DBのカラムは数値型(32bit)にします。例： INT NOT NULL<br /></p>
+</p></dd></dl><dl><dt><a name="limy:351">sessionValidCol
+</a></dt><dd><p><p>「セッション有効フラグ」を書き出すデータベースのカラム名を記述します。<br />DBのカラムは固定文字列型(1文字)にします。例： CHAR(1) NOT NULL<br /></p>
+</p></dd></dl><p>ストアに利用するDBテーブルは、予め作成しておく必要があります。<br />例を以下に挙げます。MySQLでの動作を確認しました。<br /></p>
+<pre>create table tomcat_sessions (
+  session_id     varchar(100) not null primary key,
+  valid_session  char(1) not null,
+  max_inactive   int not null,
+  last_access    bigint not null,
+  app_name       varchar(255),
+  session_data   mediumblob,
+  KEY kapp_name(app_name)
+);
+</pre>
+<p>ストアからセッションを削除したい場合、全ての値を-1、<a href="sample.html#limy:306">saveOnRestart</a>をfalseに設定して<br />サーバ(又はアプリケーション)を再起動して下さい。<br /></p>
+<a name="limy:356"></a><h2>Realm
+</h2>
+<p>親要素 : <a href="sample.html#limy:138">Engine</a> / <a href="sample.html#limy:153">Host</a> / <a href="sample.html#limy:187">Context</a><br />データベースに関する情報を記述する要素です。<br /></p>
+<dl><dt><a name="limy:358">className
+</a></dt><dd><p><p>使用するクラスを指定します。<br />このクラスは <code>org.apache.catalina.Realm</code> インターフェイスを実装している必要があります。<br /></p>
+</p></dd><dd><p><p>提供されているクラス群<br /></p>
+</p></dd><dd><p><ul><li><p><a name="limy:361"><code>org.apache.catalina.realm.JDBCRealm</code>
+</a></p></ul></p></dd><dd><p><ul><li><p><a name="limy:362"><code>org.apache.catalina.realm.DataSourceRealm</code>
+</a></p></ul></p></dd><dd><p><ul><li><p><a name="limy:363"><code>org.apache.catalina.realm.JNDIRealm</code>
+</a></p></ul></p></dd><dd><p><ul><li><p><a name="limy:364"><code>org.apache.catalina.realm.MemoryRealm</code>
+</a></p></ul></p></dd></dl><a name="limy:365"></a><h2>Resources
+</h2>
+<p>様々なリソース情報を定義する要素です。<br /></p>
+<a name="limy:367"></a><h2>Valve
+</h2>
+<p>様々なコンポーネントを定義する要素です。<br /></p>
+<p>親要素 : <a href="sample.html#limy:138">Engine</a> / <a href="sample.html#limy:153">Host</a> / <a href="sample.html#limy:187">Context</a><br /></p>
+<a name="limy:370"></a><h3>Access Log Valve
+</h3>
+<p>アクセスログのコンポーネントに関する記述です。<br /></p>
+<dl><dt><a name="limy:372">className
+</a></dt><dd><p><p>使用するクラスを指定します。<br /><code>org.apache.catalina.valves.AccessLogValve</code> を使用して下さい。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:374">directory
+</a></dt><dd><p><p>ログを出力するディレクトリを指定します。<br />デフォルトでは <code>CATALINA_HOME/logs</code> になっています。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:376">pattern
+</a></dt><dd><p><p>ログ出力フォーマットを定義します。<br /><code>common</code> / <code>combined</code> と記述すると、標準で用意されているフォーマットが用いられます。<br />独自のフォーマットを利用したい場合は、以下に記述するフォーマット文字列を組み合わせて記述します。<br /></p>
+</p></dd><dd><p><ul><li><p><a name="limy:378">%a -
+</a></p><p>リモートIPアドレス<br /></p>
+</ul></p></dd><dd><p><ul><li><p><a name="limy:380">%A -
+</a></p><p>ローカルIPアドレス<br /></p>
+</ul></p></dd><dd><p><ul><li><p><a name="limy:382">%b -
+</a></p><p>サーブレットが出力したバイト数(HTTPヘッダを除く)<br />ただし0の場合は <code>-</code>と表記します。<br /></p>
+</ul></p></dd><dd><p><ul><li><p><a name="limy:384">%B -
+</a></p><p>サーブレットが出力したバイト数(HTTPヘッダを除く)<br /></p>
+</ul></p></dd><dd><p><ul><li><p><a name="limy:386">%h -
+</a></p><p>リモートホスト名。<br />ただし、<code>resolveHosts</code> が false の場合にはIPアドレスを返す(%aと同じ)<br /></p>
+</ul></p></dd><dd><p><ul><li><p><a name="limy:388">%H -
+</a></p><p>リクエストを要求したプロトコル(HTTP/1.1等)<br /></p>
+</ul></p></dd><dd><p><ul><li><p><a name="limy:390">%l -
+</a></p><p>常に <code>-</code> を返す(利用法は不明)<br /></p>
+</ul></p></dd><dd><p><ul><li><p><a name="limy:392">%m -
+</a></p><p>リクエストメソッド(GET,POST等)<br /></p>
+</ul></p></dd><dd><p><ul><li><p><a name="limy:394">%p -
+</a></p><p>このリクエストを受け取ったローカルのポート番号<br /></p>
+</ul></p></dd><dd><p><ul><li><p><a name="limy:396">%q -
+</a></p><p>クエリー文字列<br /></p>
+</ul></p></dd><dd><p><ul><li><p><a name="limy:398">%r -
+</a></p><p>リクエストメソッド + リクエストURI<br /></p>
+</ul></p></dd><dd><p><ul><li><p><a name="limy:400">%s -
+</a></p><p>レスポンスが返したステータスコード<br /></p>
+</ul></p></dd><dd><p><ul><li><p><a name="limy:402">%S -
+</a></p><p>ユーザのセッションID<br /></p>
+</ul></p></dd><dd><p><ul><li><p><a name="limy:404">%t -
+</a></p><p>現在時刻<br /></p>
+</ul></p></dd><dd><p><ul><li><p><a name="limy:406">%u -
+</a></p><p>リモートユーザ名<br /></p>
+</ul></p></dd><dd><p><ul><li><p><a name="limy:408">%U -
+</a></p><p>リクエストURI<br /></p>
+</ul></p></dd><dd><p><ul><li><p><a name="limy:410">%v -
+</a></p><p>ローカルサーバ名<br /></p>
+</ul></p></dd><dd><p><ul><li><p><a name="limy:412">%D -
+</a></p><p>リクエストを処理するのに要した時間（ミリ秒単位）<br /></p>
+</ul></p></dd><dd><p><ul><li><p><a name="limy:414">%T -
+</a></p><p>リクエストを処理するのに要した時間（秒単位）<br /></p>
+</ul></p></dd></dl><dl><dt><a name="limy:416">prefix
+</a></dt><dd><p><p>出力するファイル名のプレフィックス（先頭に付く文字列）を指定します。<br />デフォルトは"<code>access_log.</code>"です。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:418">resolveHosts
+</a></dt><dd><p><p>ホスト名を解決するかどうかを指定します。<br />trueにすると、DNSを利用してIPアドレスからホスト名を取得します。<br />デフォルトはfalseです。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:420">suffix
+</a></dt><dd><p><p>出力するファイル名のサフィックス（後方に付く文字列）を指定します。<br />デフォルトは""（空文字）です。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:422">rotatable
+</a></dt><dd><p><p>ログのローテート処理を行うかどうかを指定します。<br />true（デフォルト）にすると、出力するログファイルは時間毎に変更されます。<br /><br /></p>
+</p></dd></dl><dl><dt><a name="limy:424">condition
+</a></dt><dd><p><p>条件付きでログを出力する場合に指定します。<br />例えば、conditionの値を"junk"と指定すると、<br /><code>ServletRequest.getAttribute("junk") == null</code> が成立する場合のみ<br />ログが出力されます。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:426">fileDateFormat
+</a></dt><dd><p><p><a href="sample.html#limy:423">rotatable</a> がtrueのとき、出力するファイル名のフォーマットを指定します。<br />デフォルトでは"<code>yyyy-MM-dd</code>"です。このとき、ファイル名は<br /><code>access_log.2004-01-26</code> のようになります。<br />この場合、ログファイルのローテート間隔は1日になります。<br />フォーマットを"<code>yyyy-MM-dd.HH</code>"のようにすれば、ローテート間隔は1時間になります。<br /><br />フォーマット形式はJava標準クラスの<code>SimpleDateFormat</code>に準拠します。<br /></p>
+</p></dd></dl><a name="limy:428"></a><h3>Remote Address Filter
+</h3>
+<p>IPアドレスによるフィルタリングを掛けるコンポーネントです。<br /></p>
+<dl><dt><a name="limy:430">className
+</a></dt><dd><p><p>使用するクラスを指定します。<br /><code>org.apache.catalina.valves.RemoteAddrValve</code> を記述して下さい。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:432">allow
+</a></dt><dd><p><p>許可するIPアドレスを記述します。複数指定する場合はカンマで区切って下さい。<br />「192.168.1.*」などのワイルドカード形式が利用できます。<br />この属性を記述した場合、指定したIPアドレスからのアクセスのみが許可されますが<br />記述しない場合はdenyで指定した<strong>以外</strong>の全てのIPアドレスからのアクセスが<strong>許可</strong>されます。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:434">deny
+</a></dt><dd><p><p>拒否するIPアドレスを記述します。複数指定する場合はカンマで区切って下さい。<br />ワイルドカード形式が利用できます。<br /></p>
+</p></dd></dl><p>allow と deny の両方に当てはまるIPアドレスは「拒否」されます。<br />やや複雑なので解説します。<br /></p>
+<dl><dt><a name="limy:437">allowとdeny両方を指定した場合
+</a></dt><dd><p><p>allowで指定してあり、かつdenyで指定していないアドレスのみが許可されます。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:439">allowのみ指定した場合
+</a></dt><dd><p><p>allowで指定したアドレスのみが許可されます。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:441">denyのみ指定した場合
+</a></dt><dd><p><p>denyで指定した以外の全てのアドレスが許可されます。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:443">両方とも指定しなかった場合
+</a></dt><dd><p><p>全てのアドレスが許可されます。<br />…フィルタリングを掛けないのと一緒です(笑)。<br /></p>
+</p></dd></dl><a name="limy:445"></a><h3>Remote Host Filter
+</h3>
+<p>ホスト名によるフィルタリングを掛けるコンポーネントです。<br /></p>
+<dl><dt><a name="limy:447">className
+</a></dt><dd><p><p>使用するクラスを指定します。<br /><code>org.apache.catalina.valves.RemoteHostValve</code> を記述して下さい。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:449">allow
+</a></dt><dd><p><p>許可するホスト名を記述します。複数指定する場合はカンマで区切って下さい。<br />「*.limy.org」などのワイルドカード形式が利用できます。<br />この属性を指定しない場合、denyで指定した以外の全てのホストからのアクセスが許可されます。<br /></p>
+</p></dd></dl><dl><dt><a name="limy:451">deny
+</a></dt><dd><p><p>拒否するホスト名を記述します。複数指定する場合はカンマで区切って下さい。<br />ワイルドカード形式が利用できます。<br /></p>
+</p></dd></dl><p>allow と deny の両方に当てはまるホスト名は「拒否」されます。<br /></p>
+
+	</div>
+</div>

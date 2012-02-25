@@ -1,0 +1,39 @@
+Limyweb Lrd Application
+---------------------------
+LrdによるWebページ作成および公開をサポートするアプリケーションです。
+
+= License
+GPL(Ver.2)ライセンスを適用しています。
+
+= File Locations
+
+[Root]
+  COPYING --- ライセンス定義ファイル
+  COPYRIGHT --- 著作権ファイル
+  README --- このファイル
+  distribute/ --- 配布用ファイル群（IzPack使用）
+  images/ --- イメージ格納ディレクトリ
+  script/ --- JavaScript格納ディレクトリ
+  style/ --- CSSファイル格納ディレクトリ
+  WEB-INF/
+    classes/ --- クラスファイル
+    lib/ --- 各種jarファイルが格納されている
+    main/
+      src/ --- ソースファイル
+    test/
+      src/ --- テスト用ソースファイル
+      bin/ --- テスト用クラスファイル
+    application.properties --- アプリ用プロパティファイル（後述のxml内から使用）
+    applicationContext-action.xml --- Spring設定ファイル（アクション用）
+    applicationContext-dao.xml --- Spring設定ファイル（アクション用）
+    applicationContext-model.xml --- Spring設定ファイル（モデル用）
+    web.xml --- J2EE設定ファイル
+
+= TODO
+今後やりたいこと一覧のメモ。
+
+編集画面
+- 依存ファイルはデフォルトで index.lrd を入れる。
+- ソース中にローカル参照のIMGタグがあったら、そのファイルを依存ファイルに自動組み込み（コミット時に）
+- 依存ファイル、参照ファイルを（入力式ではなく）選択式で行えるようにする。
+

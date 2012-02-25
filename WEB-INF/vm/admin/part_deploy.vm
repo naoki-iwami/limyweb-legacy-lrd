@@ -1,0 +1,22 @@
+<table border="0" bgcolor="#FEFAF4" style="width: 600">
+	<tr>
+		<td>ID : </td><td><input class="resInput" size="10" name="deployId"></td>
+		<td rowspan="6">
+	</tr>
+	<tr>
+		<td>Http Url : </td><td><input class="resInput" size="40" name="httpUrl"></td>
+	</tr>
+	<tr>
+		<td>Ftp Server : </td><td><input class="resInput" size="20" name="ftpServer"></td>
+	</tr>
+	<tr>
+		<td>Ftp Path : </td><td><input class="resInput" size="30" name="ftpPath"></td>
+	</tr>
+	<tr>
+		<td>Ftp User : </td><td><input class="resInput" size="10" name="ftpUser"></td>
+	</tr>
+	<tr>
+		<td>Ftp Password : </td><td><input type="password" class="resInput" size="10" name="ftpPassword"></td>
+		<td><input class="resButton" type="button" value="FTPデプロイ先追加" onclick="clickFtpDeploy(this)"></td>
+	</tr>
+</table>

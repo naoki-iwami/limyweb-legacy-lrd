@@ -1,0 +1,20 @@
+#macro(writeMenuRecursive $node)
+	#if ($node.isFolder())
+        <h5>
+          $!Util.markStrongStart($node.path, $targetPath)<a href="${baseHref}/$node.path.relativePath">$Util.getIndexLrdTitle($node.path)</a>$!Util.markStrongEnd($node.path, $targetPath)
+        </h5>
+        <ul>
+		#foreach ($child in $node.subNodes)
+		  #if ($child.isFolder() || ($Util.isLrd($child.path) && !$Util.isIndex($child.path)))
+          <li>
+			#writeMenuRecursive($child)
+		  </li>
+		  #end
+		#end
+		</ul>
+	#else
+		$!Util.markStrongStart($node.path, $targetPath)<a href="${baseHref}/$!Util.getHtmlPath($node.path)">$!Util.getLrdTitle($node.path)</a>$!Util.markStrongEnd($node.path, $targetPath)
+	#end
+#end
+
+#writeMenuRecursive($menuNodes)

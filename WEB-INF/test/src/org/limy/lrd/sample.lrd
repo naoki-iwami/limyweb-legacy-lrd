@@ -1,0 +1,975 @@
+;-*-mode: rd; rd-auto-conv: t; -*-
+title=Tomcat5 - server.xml
+style=../style.css
+depend=index.lrd
+history=../history.html
+print-time=true
+extcode=true
+menutype=all
+# comment
+=begin head
+<script language="JavaScript" src="/script/strutil.js"></script>
+<script language="JavaScript" src="/script/floatmenu_d.js"></script>
+=end
+=begin body
+<body onLoad="init()" onClick="clickBody()" onScroll="funcScroll()" onResize="funcResize()">
+=end
+=begin
+=== ((<Top|URL:./>))
+
+Tomcat5.5のserver.xmlについての解説です。
+項目の中にはまだ実際に機能していないものも多数あります。
+また、今後新たな項目が追加される可能性もあります。
+
+== 要素の親子関係
+((:<div align="center">:))
+((<親子関係|"IMG:/images/program/server_xml.png">))
+((:</div>:))
+
+== Server
+server.xmlのルートになる唯一の要素(Element)です。
+: className
+  使用するサーブレットコンテナクラスを指定します。
+  このクラスは (({org.apache.catalina.Server})) インターフェイスを実装している必要があります。
+  省略すると、(({org.apache.catalina.core.StandardServer})) がデフォルトで使用されます。
+: port 
+  このサーバがシャットダウンコマンドを受け取るために待機するポート番号を指定します。
+: shutdown
+  このサーバをシャットダウンさせる為に使用するコマンド文字列を指定します。
+  上で指定したポートは、この文字列を受け取るとサーバをシャットダウンさせます。
+
+子要素 : ((<Service>)) / ((<GlobalNamingResources>)) 
+
+親要素 : ((<Server>))
+== Service
+サービスを表現する要素です。一つもしくはそれ以上のコネクタと唯一のエンジンを子に持ちます。
+
+: className
+  使用するサービスクラスを指定します。
+  このクラスは (({org.apache.catalina.Service})) インターフェイスを実装している必要があります。
+  省略すると、(({org.apache.catalina.core.StandardService})) がデフォルトで使用されます。
+
+: name
+  このサービスの名前を記述します。
+  サーバ内に複数のサービスがある場合は、それらの名前はユニークである必要があります。
+
+子要素 : ((<Engine>)) / ((<Connector>))
+
+== Connector
+ここでTomcatと外部ポート(通常はHTTP)との接続方法を指定します。
+
+: allowTrace
+  (({true})) にすると、「TRACE HTTPメソッド」を有効にします。
+  デフォルトでは (({false})) です。
+  詳細は不明です。
+
+: emptySessionPath
+  (({true})) にすると、セッション（クッキー）のパスを全て「/」 にセットします。
+  効能は不明です。
+  デフォルトでは (({false})) です。
+
+: enableLookups
+  DNSルックアップを利用するかどうかを指定します。
+  これを利用するとサーブレットコンテナのパフォーマンスが落ちるので
+  なるべくならfalseにしましょう。
+  ((*Tomcat5では、デフォルト値がtrueに変更されています！*))
+
+: maxPostSize
+  フォームからPOSTできる最大サイズをbyte単位で指定します。
+  デフォルトは2M(2097152)です。
+
+: protocol
+  HTTPのプロトコルを指定します。デフォルトではHTTP/1.1です。
+
+: proxyName
+  このコネクタがプロキシを利用する場合、そのプロキシのサーバ名を記述します。
+
+: proxyPort
+  このコネクタがプロキシを利用する場合、そのプロキシのポート番号を記述します。
+
+: redirectPort
+  リダイレクトに使用するポート番号を指定します。
+  詳細は不明です。
+
+: scheme
+  (({request.getScheme()})) 呼び出しで返されるスキーマ文字列を定義します。
+  デフォルトでは (({http})) です。
+
+: secure
+  (({request.isSecure()})) 呼び出しで返されるセキュア情報(boolean値)を定義します。
+  デフォルトでは (({false})) です。
+  SSLを使用する場合にはtrueを指定して下さい。
+
+: URIEncoding
+  「http://contents?a=%12%34」形式で記述されたURLをデコードする際の
+  文字エンコーディングを指定します。デフォルトは「ISO-8859-1」です。
+
+: useBodyEncodingForURI
+  Tomcat4.1.x系との互換性の為に使用されます。
+  デフォルトは (({false})) ですが、互換を保つには (({true})) を指定して下さい。
+  (({true})) にすると、ContentType又はRequest.setCharacterEncodingメソッドで指定された
+  エンコーディングをデコードに使用します。((<URIEncoding>))は使われません。
+
+: xpoweredBy
+  詳細は不明です。
+
+=== CoyoteConnector
+デフォルトのHTTP Connectorを使用する際には、以下の属性が使用できます。
+
+: acceptCount
+  このサーバへの接続要求キューのサイズを指定します。
+  この値を超えて要求された全てのリクエストは拒否されます。
+  デフォルトは 10 です。
+
+: address
+  このServer(ポート)を受け付けるIPアドレスを指定します。
+  省略すると、全てのIPアドレスはこのServerに関連付けられます。
+
+: bufferSize
+  このコネクタが入力ストリームとして生成するバッファサイズをbyte単位で指定します。
+  デフォルトは2048bytesです。
+
+: compressableMimeTypes
+  後述の ((<compression>)) で圧縮するMIMEタイプをカンマ区切りで記述します。
+  デフォルトは、(({text/html,text/xml,text/plain})) です。
+
+: compression
+  HTTP1/1のGZIP圧縮を利用するかどうかを指定します。
+  on、off(デフォルト)、forceあるいは正整数を記述できます。
+
+: connectionLinger
+  詳細は不明です。
+
+: connectionTimeout
+  この接続のタイムアウト値をミリ秒単位で指定します。
+  デフォルトは60000(60秒)です。
+
+: disableUploadTimeout
+  詳細は不明です。
+
+: maxKeepAliveRequests
+  (({keep-alive})) の数を指定します。
+  詳しくはApacheのドキュメント等を参考にして下さい。
+  デフォルトは100です。
+
+: maxSpareThreads
+  スレッドプールに存在できるスペア・スレッドの最大数を指定します。
+  詳しくはApacheのドキュメント等を参考にして下さい。
+  デフォルトは50です。
+
+: maxThreads
+  リクエスト処理スレッドの最大数を指定します。
+  詳しくはApacheのドキュメント等を参考にして下さい。
+  デフォルトは200です。
+
+: minSpareThreads
+  スレッドプールに存在するスペア・スレッドの最低数を指定します。
+  詳しくはApacheのドキュメント等を参考にして下さい。
+  デフォルトは4です。
+
+: noCompressionUserAgents
+  GZIP圧縮を利用しないユーザーエージェント名を記述します。
+  正規表現が利用でき、複数指定時にはカンマで区切ります。
+
+: port
+  このコネクタが使用するポート番号を指定します。
+
+: restrictedUserAgents
+  (({keep-alive})) を使用しないユーザエージェント一覧を正規表現（カンマ区切り）で指定します。
+  携帯端末などを指定しておくと良いでしょう。
+
+: server
+  HTTPレスポンスの「Server」ヘッダを指定します。
+
+: socketBuffer
+  ソケットの出力バッファサイズ（byte単位）を指定します。-1にするとバッファを使用しません。
+  デフォルトは9000です。
+
+: strategy
+  スレッドプーリング方法を指定します。
+  詳細は不明です。
+
+: tcpNoDelay
+  true(デフォルト)にすると、このコネクタが利用するソケットにオプションを適用します。
+  詳しくはJava APIドキュメントの (({java.net.SocketOptions.TCP_NODELAY})) を参考にして下さい。
+
+: threadPriority
+  リクエスト処理を行うプロセスのスレッド優先順位を指定します。
+  デフォルトでは (({java.lang.Thread#NORM_PRIORITY})) です。
+
+==== SSL
+このコネクタをSSL接続にしたい場合は、((<secure>))をtrueに指定します。
+それに加え、以下の属性を((<Connector>))要素に追記することが出来ます。
+
+: algorithm
+  証明書の符号化アルゴリズムを指定します。
+  デフォルトはSunX509です。
+
+: clientAuth
+  詳細は不明です。
+
+: keystoreFile
+  SSL認証に使用するkeystoreファイルのパスを指定します。
+  デフォルトでは、Tomcatを起動したユーザのホームディレクトリ内にある
+  ".keystore"ファイルが利用されます。
+
+: keystorePass
+  SSL認証に使用するkeystoreのパスワードを記述します。
+
+: keystoreType
+  SSL認証に使用するkeystoreファイルの種類を記述します。
+  デフォルトは"JKS"です。
+
+: sslProtocol
+  使用するSSLプロトコルのバージョンを指定します。
+  デフォルトは"TLS"です。
+
+: ciphers
+  詳細は不明です。
+
+== GlobalNamingResources
+親要素 : ((<Server>))
+このサーバに共通で使用されるリソースを指定します。
+3種類の子要素を持つことができます。
+
+=== Environment
+環境変数を定義します。利用する際にはJNDIを使います。
+
+: description
+  この環境変数に関する情報を記述します。
+  これはサーバに全く関与しない、あくまでこの設定ファイルを読む他の人間に対する記述です。
+: name
+  この環境変数を登録するJNDI名を記述します。
+  実際に登録されるJNDI名は、(({java:comp/env})) + name となります。
+  例えば、(({maxLen})) という名前の環境変数を利用する場合には
+  プログラム内には(({lookup("java:comp/env/manLen")}))と記述します。
+: override
+  trueにすると、この環境変数と同名の変数が
+  各アプリケーションのweb.xml内で記述されていた場合にそれを上書きします。
+  デフォルトはtrueです。
+: type
+  この環境変数のクラス名を完全限定名で指定します。
+  指定できるクラスは、Javaプリミティブ型のラップクラスとStringのみです。
+: value
+  この環境変数に割り当てる値を記述します。
+
+=== Resource
+一般的なリソースを定義します。
+
+: auth
+  Application または Container を記述します。
+: description
+  このリソースに関する情報を記述します。
+  これはサーバに全く関与しない、あくまでこの設定ファイルを読む他の人間に対する記述です。
+: name
+  このリソースを登録するJNDI名を記述します。
+  実際に登録されるJNDI名は、(({java:comp/env})) + name となります。
+  例えば、(({UserDataBase})) という名前の環境変数を利用する場合には
+  プログラム内には(({lookup("java:comp/env/UserDataBase")}))と記述します。
+: scope
+  リソースマネージャから得たこのリソースの接続を共有するかどうかを指定します。
+  Shareable(デフォルト) または Unshareable を記述します。
+: type
+  このリソースのクラス名を完全限定名で指定します。
+
+Tomcat5.5では、リソースの記述方法が変わっています。
+そのため、以前の設定ファイルをそのまま利用することが出来ません。
+
+((<JNDI Datasource HOW-TO|URL:http://jakarta.apache.org/tomcat/tomcat-5.5-doc/jndi-datasource-examples-howto.html>))
+
+具体的には、以前まであった (({ResourceParams})) 要素が無くなっています。
+以前までここに記述していた内容は、(({Resource})) 要素の属性として記述する必要があります。
+
+=end
+=== ResourceParams
+リソースに渡すパラメータを記述します。
+((<Resource>))要素とペアで使用して下さい。
+=begin
+
+== Engine
+親要素 : ((<Service>))
+サーブレットエンジンコンテナの情報を記述します。
+エンジンコンテナは、一つもしくはそれ以上のコネクタからのリクエストを受け取り
+レスポンスを返します。
+
+: backgroundProcessorDelay
+  詳細は不明です。
+: className
+  使用するエンジンクラスを指定します。
+  このクラスは (({org.apache.catalina.Engine})) インターフェイスを実装している必要があります。
+  省略すると、(({org.apache.catalina.core.StandardEngine})) がデフォルトで使用されます。
+: defaultHost
+  デフォルトのホスト名を記述します。
+  これは、このエンジンの子に存在する((<Host>))要素のname属性に対応させる必要があります。
+: jvmRoute
+  ロード・バランシング(負荷分散)機能を利用するときに使います。
+  この機能はJK/JK2インターフェイスを使ってApacheと連携を取っている状況下で働きます。
+  詳細は不明ですが、おそらく異なるEngineに異なるjvmRoute属性を記述すれば良いはずです。
+  jvmRoute属性文字列は識別子となり、セッションIDのサフィックス等にも使われます。
+: name
+  このエンジンに付ける名前を記述します。
+
+子要素 : ((<Host>)) / ((<Realm>)) / ((<DefaultContext>))
+一つ以上のHost要素が必須となります。
+
+=== ログについて
+Tomcat5.5より前のTomcatでは、ログ出力は (({debug})) 属性により制御していました。
+Tomcat5.5では、ログ出力は (({log4j})) により制御されます。
+このエンジンに対する全てのログ出力は、
+(({org.apache.catalina.core.ContainerBase.[エンジン名]})) カテゴリ以下に出力されます。
+
+== Host
+親要素 : ((<Engine>))
+バーチャルホストを定義します。
+
+: appBase
+  このバーチャルホストの基準ディレクトリを指定します。
+
+: autoDeploy
+  true（デフォルト）にすると、Tomcat起動中に ((<appBase>)) ディレクトリに
+  Webアプリケーションを配置すると、自動的にデプロイされます。
+  詳しくは ((<オートデプロイ>)) を参照して下さい。
+
+: backgroundProcessorDelay
+  詳細は不明です。
+
+: className
+  使用するホストのクラスを指定します。
+  このクラスは (({org.apache.catalina.Host})) インターフェイスを実装している必要があります。
+  省略すると、(({org.apache.catalina.core.StandardHost})) がデフォルトで使用されます。
+
+: deployOnStartup
+  Tomcat起動時に ((<オートデプロイ>)) を行うかどうかを指定します。
+  デフォルトはtrueです。
+
+: name
+  このバーチャルホストが利用されるネットワーク名を指定します。
+  ネットワーク名とはDNSサーバに登録されているものを指定するか (({localhost})) と記述する必要があります。
+
+=== StandardHost
+以下、(({org.apache.catalina.core.StandardHost})) を使用した場合に使用できる属性を説明します。
+
+: deployXML
+  ((<オートデプロイ>))時にXMLファイルの読み込みを行うかどうかを指定します。
+  デフォルトはtrueです。falseにすると
+  (({$CATALINA_HOME/conf/[engine_name]/[host_name]})) ディレクトリ以外にある
+  warファイルの手動インストールも不可能になります。
+
+  つまり、(({$CATALINA_HOME/conf/[engine_name]/[host_name]})) ディレクトリと
+  そのサブディレクトリ以外にあるファイルが
+  一切使えないようになるので、セキュリティの面で安全性が高まります。
+
+: errorReportValveClass
+  このホストでエラーが発生した場合、それを画面に出力する為のクラスを指定します。
+  このクラスは (({org.apache.catalina.Valve})) インターフェイスを実装している必要があります。
+  デフォルトでは (({org.apache.catalina.valves.ErrorReportValve})) が使用されます。
+
+: unpackWARs
+  ((<appBase>)) ディレクトリ上に配置したWARファイルを
+  このディレクトリ上に展開(解凍)するかどうかを指定します。
+  false にすると、配置されたWARファイルはそのままの形で実行されます。
+
+: workDir
+  このホストが一時的に利用するディレクトリを指定します。
+  コンテキスト毎に指定する場合は、Context要素のworkDir属性を記述すれば
+  この値は上書きされます。
+  省略すると、(({$CATALINA_HOME/work})) がデフォルトで使用されます。
+
+子要素 : ((<Realm>)) / ((<Valve>)) / ((<Context>))
+
+=== オートデプロイ
+Catalinaを起動した際、autoDeploy属性がtrueならばオートデプロイ機能が働きます。
+以下の3項目がその処理内容です。
+これらはホスト毎のappBase属性を基準として行なわれます。
+
+(1) XMLファイルの読み込み
+    ((<deployOnStartup>))属性がtrue(デフォルト)の場合に以下の処理が働きます。
+    (({$CATALINA_HOME/conf/[engine_name]/[host_name]})) 上にある
+    全てのXMLファイルが読み込まれます。
+    このファイルにはContext要素(とその子要素)を記述できます。
+    こうやって (({conf/server.xml})) から分離して別ファイルに記述することで
+    各コンテキストを一時的に利用可能／不可能にする事が簡単に行えるようになります。
+
+(2) WARファイルの読み込みと展開
+
+    (({$CATALINA_HOME/conf/[engine_name]/[host_name]})) 上にある全てのWARファイルを
+    そのファイル名から拡張子.warを取り除いた名前のコンテキストとして認識します。
+    さらに、((<unpackWARs>))属性がtrueの場合は同名のディレクトリを作成してWARファイルを展開します。
+    ただし、既に同名のディレクトリが存在する場合には展開はされません。
+
+(3) サブディレクトリの自動コンテキスト設定
+
+    appBase上にある全てのサブディレクトリ(WARファイルを解凍したものを除く)は、
+    それに関するContext要素が自動的に作成されます。
+    ただし、これらのサブディレクトリ内に WEB-INF/web.xml ファイルが存在しているものに限ります。
+    これらのコンテキストには ((<DefaultContext>)) の属性が適用されます。
+    コンテキストパスは (({/dir_name})) という形式になりますが、
+    唯一例外として (({ROOT})) という名前のディレクトリはこのホストのルートコンテキストとして設定されます。
+
+== Context
+親要素 : ((<Host>))
+Webアプリケーション単位のコンテキスト設定を記述します。
+((<オートデプロイ>))を利用することにより、この要素は別ファイルに分けることが出来ます。
+コンテキスト(アプリケーション)毎に設定ファイルを用意することができるので便利です。
+
+: backgroundProcessorDelay
+  不明です。
+
+: className
+  使用するコンテキストクラスを指定します。
+  このクラスは (({org.apache.catalina.Context})) インターフェイスを実装している必要があります。
+  省略すると、(({org.apache.catalina.core.StandardContext})) がデフォルトで使用されます。
+
+: cookies
+  アプリケーションがセッションを識別するのに
+  クッキーを使用するかどうかを指定します。デフォルトでは true です。
+  false にすると、URLにセッションIDを埋め込む形でしかセッションを利用できなくなります。
+  これは携帯サイトなどクッキーを利用できないブラウザでは必要な手段となります。
+
+: crossContext
+  このコンテキストを他のコンテキストから参照できるかどうかを指定します。
+  true にすると、他のコンテキストから (({ServletContext.getContext(String)})) メソッドを
+  呼び出すことによって (({ServletContext})) オブジェクトを取得することが出来ます。
+
+: docBase
+  このコンテキストのルートディレクトリを指定します。
+  WARファイルを指定することも出来ます。
+
+: override
+  true にすると、各属性は ((<DefaultContext>))要素の属性を(もしあれば)上書きします。
+  false(デフォルト)では、((<DefaultContext>))要素の属性が(もしあれば)そのまま使われます。
+
+: privileged
+  このWebアプリケーションに特権を与えるかどうかを指定します。
+  true にすると、コンテナ・サーブレットを使うことが可能になります。
+  コンテナ・サーブレットとは、(({org.apache.catalina.ContainerServlet}))インターフェイスを
+  実装したサーブレットの事を指します。
+
+: path
+  このコンテキストに対応するURIを記述します。
+
+: reloadable
+  true にすると、Catalina は (({/WEB-INF/classes/})) と (({/WEB-INF/lib/})) に存在するファイルの内容を
+  随時チェックし、変更があった場合にはそれをリロードします。
+  この機能はサーブレットのデバッグ時には大変便利ですが、その為にかなりのオーバーヘッドを要します。
+  実運用段階では、この項目は必ず false にすることを推奨します。
+
+: wrapperClass
+  使用するラッパークラスを指定します。
+  このクラスは (({org.apache.catalina.Wrapper})) インターフェイスを実装している必要があります。
+  省略すると、(({org.apache.catalina.core.StandardWrapper})) がデフォルトで使用されます。
+  
+=== StandardContext
+以下、(({org.apache.catalina.core.StandardContext})) を使用した場合に使用できる属性を説明します。
+
+: allowLinking
+  (({true})) にすると、シンボリックリンクが使用可能になります。
+  デフォルトは (({false})) です。
+  ((*Windows等、ファイル名の大小文字を区別しないシステムでは必ずfalseにして下さい！*))
+
+: antiJARLocking
+  (({true})) にすると、TomcatのクラスローダはJARファイルをロックしなくなります。
+  これにより、アプリケーションの起動時間は遅くなりますが
+  ファイルがロックされてしまう環境では有用であるかもしれません。
+  デフォルトは (({false})) です。
+
+: antiResourceLocking
+  (({true})) にすると、Tomcatは全てのファイルをロックしなくなります。
+  これにより、アプリケーションの起動時間は著しく遅くなりますが
+  いかなる環境においてもアプリケーションの完全なホットデプロイが可能になります。
+  デフォルトは (({false})) です。
+
+: cacheMaxSize
+  画像などの静的リソースをキャッシュするバッファのサイズをキロバイト単位で指定します。
+  デフォルトは10240（10MB）です。
+
+: cacheTTL
+  キャッシュされたファイルが変更されたかどうかをチェックする間隔をミリ秒単位で指定します。
+  デフォルトは5000（5秒）です。
+
+: cachingAllowed
+  静的リソースをキャッシュするかどうかを指定します。
+  デフォルトでは (({true})) です。
+  
+: caseSensitive
+  (({true})) にすると、文字列の大小文字チェックを無効にします。
+  デフォルトは (({true})) です。
+  ((*Windows等、ファイル名の大小文字を区別しないシステムでは必ずtrueにして下さい！*))
+
+: processTlds
+  詳細は不明です。
+
+: swallowOutput
+  (({true})) にすると、標準出力およびエラー出力(System.out,err)への出力が全て
+  アプリケーションのロガーに渡されます。デフォルトは (({false})) です。
+
+: tldNamespaceAware
+  (({true})) にすると、TLDファイルのXML検証時に名前空間の概念が適用されます。
+  そのため、アプリケーションの起動時間は遅くなります。
+  デフォルトは (({false})) です。
+
+: tldValidation
+  (({true})) にすると、TLDファイルのXML検証が行われます。
+  そのため、アプリケーションの起動時間は遅くなります。
+  デフォルトは (({false})) です。
+
+: unpackWAR
+  (({true})) にすると、このアプリケーションがWARファイルで提供されたときに
+  TomcatがWARファイルを展開します。
+  デフォルトは (({true})) です。
+
+: useNaming
+  (({true})) にすると、CatalinaはJNDIのInitialContextを利用可能にします。
+  デフォルトは (({true})) です。
+
+: workDir
+  このコンテキストが一時的に利用するディレクトリを指定します。
+  省略すると、(({$CATALINA_HOME/work})) がデフォルトで使用されます。
+
+子要素 : Loader / ((<Manager>)) / ((<Realm>)) / ((<Resources>)) / ((<Parameter>)) / ((<Environment>)) / ((<Resource>)) / ((<ResourceParams>)) / ((<ResourceLink>))
+
+=== Parameter
+このコンテキストで利用できるパラメータを宣言します。
+これは ((<web.xml|URL:web_xml.html>)) 内の ((<context-param>))要素で宣言するのと同一の効果があります。
+アプリケーション内でパラメータを取得するには、(({ServletContext.getInitParameter()}))を使用します。
+
+: description
+  このパラメータに関する情報を記述します。
+  これはサーバに全く関与しない、あくまでこのファイルを読む他の人間に対する記述です。
+
+: name
+  このパラメータの名前を記述します。
+
+: override
+  これと同じ名前のパラメータが ((<web.xml|URL:web_xml.html>)) 内で見つかったとき、
+  その値を上書きするかどうかを指定します。デフォルトは true です。
+
+: value
+  このパラメータの値を記述します。
+
+=== ResourceLink
+グローバルリソースをアクセスする為の記述をします。
+
+: global
+  グローバルリソース名
+
+: name
+  リソースをアクセスする際のJNDI名。これは (({java:comp/env/})) からの相対名になります。
+
+: type
+  リソースのタイプ(クラス)名
+
+== Manager
+親要素 : ((<Context>))
+HTTPセッションを生成、確保する為のセッションマネージャの設定をします。
+
+: className
+  使用するコンテキストクラスを指定します。
+  このクラスは (({org.apache.catalina.Manager})) インターフェイスを実装している必要があります。
+  省略すると、(({org.apache.catalina.session.StandardManager})) がデフォルトで使用されます。
+
+: distributable
+  アプリケーションが使用するセッションオブジェクトが
+  全て直列化可能なことを示すときにtrueにします。
+  デフォルトは (({false})) です。
+  (({true})) のとき、直列化不可能((({Serializable})))なオブジェクトを
+  セッションに格納しようとすると (({IllegalArgumentException})) が発生します。
+
+  Tomcatのクラスタリング機能を有効にするとき、この値は (({true})) にする必要があります。
+  もしくは、アプリケーション毎に (({distributable})) 属性を指定します。
+
+=== StandardManager
+以下、(({org.apache.catalina.session.StandardManager})) を使用した場合に使用できる属性を説明します。
+
+: algorithm
+  セッション識別子を計算するアルゴリズムを指定します。
+  この値は (({java.security.MessageDigest})) クラスでサポートされている必要があります。
+  デフォルトは (({MD5})) です。
+
+=end
+: checkInterval
+  セッションの有効期限をチェックする間隔を秒単位で指定します。
+  デフォルトは60秒です。
+  この為、例えばセッションタイムアウト値を3分に設定していても
+  実際にセッションが切断されるのは3～4分の間になります。
+=begin
+
+: entropy
+  セッション識別子生成時に用いられる乱数生成メソッドに渡す文字列を指定します。
+  デフォルトでもある程度有用なセッション識別子は生成されますが、
+  セキュリティが重要な環境下で使用する場合には
+  ここで明示的に何らかの文字列を指定する方がより強固な(他人に利用されにくい)識別子が生成されます。
+
+: maxActiveSessions
+  マネージャによって生成されるアクティブ・セッションの最大数を制限します。
+  -1(デフォルト)にすると、セッションは無制限に生成されます。
+
+: maxInactiveInterval
+  詳細は不明です。
+
+: pathname
+  アプリケーション再起動時に保存されるセッション状態を記述したファイルがあります。
+  デフォルトでは (({workDir/SESSIONS.ser})) ですが、
+  ここではそのファイル名およびパスを指定する事が出来ます。
+
+: processExpiresFrequency
+  詳細は不明です。
+
+: randomClass
+  使用する乱数生成クラスを指定します。
+  このクラスは (({java.util.Random})) インターフェイスを実装している必要があります。
+  省略すると、(({java.security.SecureRancom})) がデフォルトで使用されます。
+
+: sessionIdLength
+  生成されるセッションIDの長さを指定します。
+  デフォルトは (({16})) です。
+
+=== PersistentManager
+以下、(({org.apache.catalina.session.PersistentManager})) を使用した場合に使用できる属性を説明します。
+このマネージャを利用すると、セッションのスワップ管理を制御することができます。
+※ このマネージャはまだテスト段階です
+
+概要を説明します。
+基本的に作成されたセッションはメモリ内に保持されますが、
+数が多くなってくるとメモリ使用量も圧迫されます。
+
+そこで、一定期間使われていないセッションをストア(ファイルやDBレコード)に保管して
+メモリから破棄する処理を行います。これをスワップアウトといいます。
+また、オブジェクトの破棄は行わずストアへの保管だけを行うことをバックアップといいます。
+
+ストアに保管する際にはJavaのオブジェクトを直列化するので
+セッションに利用するオブジェクトは(({Serializable}))インターフェイスを実装する必要があります。
+具体的には、
+
+  session.setAttribute(name, value);
+
+としたときに、valueオブジェクトが(({Serializable}))インターフェイスを実装していないと
+例外が発生します。
+
+このマネージャを利用すると、以下の処理が ((<checkInterval>)) 秒ごとに行われます。
+
+* 一定時間使われていないセッションを破棄します。
+  このときのタイムアウト値はweb.xmlの((<session-timeout>))要素で指定されます。
+* ((<maxIdleSwap>))秒以上使われていないセッションをスワップアウトします。
+* ((<maxActiveSessions>))個を超えたセッションのうち、
+  ((<minIdleSwap>))秒以上使われていないものをスワップアウトします。
+* ((<maxIdleBackup>))秒以上使われていないセッションをバックアップします。
+
+以下、PersistentManager要素に指定できる属性を列挙します。
+
+: algorithm
+  セッション識別子を計算するアルゴリズムを指定します。
+  この値は (({java.security.MessageDigest})) クラスでサポートされている必要があります。
+  デフォルトは (({MD5})) です。
+
+=end
+: checkInterval
+  セッションの有効期限をチェックする間隔を秒単位で指定します。
+  デフォルトは60秒です。
+  この為、例えばセッションタイムアウト値を3分に設定していても
+  実際にセッションが切断されるのは3～4分の間になります。
+=begin
+
+: className
+  使用するPersistentManagerクラスを指定します。
+  このクラスは (({org.apache.catalina.Manager})) インターフェイスを実装している必要があります。
+  (({org.apache.catalina.session.PersistentManager})) を指定して下さい。
+
+: entropy
+  セッション識別子生成時に用いられる乱数生成メソッドに渡す文字列を指定します。
+  デフォルトでもある程度有用なセッション識別子は生成されますが、
+  セキュリティが重要な環境下で使用する場合には
+  ここで明示的に何らかの文字列を指定する方がより強固な(他人に利用されにくい)識別子が生成されます。
+
+: randomClass
+  使用する乱数生成クラスを指定します。
+  このクラスは (({java.util.Random})) インターフェイスを実装している必要があります。
+  省略すると、(({java.security.SecureRancom})) がデフォルトで使用されます。
+
+: saveOnRestart
+  これをtrue(デフォルト)にすると、全ての有効なセッションは
+  Catalinaサーバ終了時にスワップアウトされ保管されます。
+  保管された全てのセッションは、次回のサーバスタート時にメモリにロードされます。
+  つまり、サーバを再起動してもセッションは無効になりません。
+  これはアプリケーションの停止／開始や再起動時にも同じように働きます。
+
+: maxActiveSessions
+  メモリ内に保持できるセッションの最大数を制限します。
+  -1(デフォルト)にすると、セッションは無制限に生成されます。
+  この値を超えるセッションを生成しようとするとIllegalStateExceptionが発生します。
+  このときに独自の画面を表示させたいなら、web.xmlの((<error-page>))要素を記述して下さい。
+
+: minIdleSwap
+  セッションは最大数((<maxActiveSessions>))を超えると
+  超えた分のセッションがスワップアウトされますが、
+  少なくともこの秒数を超える期間使われない限りはスワップアウトの対象になりません。
+  スワップアウトされたセッションに再度接続要求が来ると、
+  Catalinaはセッションをスワップインして利用することになります。
+
+: maxIdleSwap
+  セッションが最後に使われてからスワップアウトされるまでの時間を秒単位で指定します。
+  ((<minIdleSwap>))がこの値より大きい場合、この値は((<minIdleSwap>))で上書きされます。
+  -1にすると全てのセッションはスワップアウトされません。
+
+: maxIdleBackup
+  セッションが最後に使われてからバックアップされるまでの時間を秒単位で指定します。
+  バックアップはスワップアウトと似ていますが、こちらはメモリからセッションを削除しません。
+  -1にすると、セッションはバックアップされません。
+
+  処理内容は似ていますが、使用目的はスワップアウトとは異なるはずです。
+  スワップアウトはメモリ使用量を抑える目的で使われるのに対し、
+  バックアップはセッションを記憶領域に保管してログのような目的で使われるのだと思います。
+
+: maxInactiveInterval
+  詳細は不明です。
+
+: sessionIdLength
+  生成されるセッションIDの長さを指定します。
+  デフォルトは (({16})) です。
+
+スワップアウトされたセッションはストアと呼ばれる場所に保管されます。
+ストアの指定は、Manager要素の子要素Storeに必ず指定しなければなりません。
+
+==== File Based Store
+ファイルベースのストアを使う場合は、以下の属性をStore要素に付加します。
+
+: className
+  (({org.apache.catalina.session.FileStore})) を記述します。
+
+: checkInterval
+  ストアに保管されたセッションが切断されたかどうかのチェックを行う間隔を
+  秒単位で指定します(デフォルトは60秒)。
+
+: directory
+  セッションを保管するディレクトリを指定します。
+  相対パスで記述した場合、その基準ディレクトリはworkディレクトリになります。
+
+==== JDBC Based Store
+JDBC経由でデータベースをストアとして使う場合は、以下の属性をStore要素に付加します。
+
+: className
+  (({org.apache.catalina.session.JDBCStore})) を記述します。
+
+: checkInterval
+  ストアに保管されたセッションが切断されたかどうかのチェックを行う間隔を
+  秒単位で指定します(デフォルトは60秒)。
+
+: driverName
+  使用するJDBCドライバのクラス名を記述します。
+
+: connectionURL
+  データベースにJDBC接続するためのURLを記述します。
+
+: sessionTable
+  ストアに利用するデータベースのテーブル名を記述します。
+
+: sessionIdCol
+  「セッションID」を書き出すデータベースのカラム名を記述します。
+  DBのカラムは可変文字列型にします。例： VARCHAR(100) NOT NULL PRIMARY KEY
+
+: sessionAppCol
+  「セッションアプリケーション名」を書き出すデータベースのカラム名を記述します。
+  これは「エンジン名/ホスト名/アプリケーション名」の形式になります。
+  DBのカラムは可変文字列型にします。例： VARCHAR(255)
+
+: sessionDataCol
+  「セッションデータ」を書き出すデータベースのカラム名を記述します。
+  DBのカラムはBLOB型にします。例：MEDIUMBLOB
+
+: sessionLastAccessedCol
+  「最終アクセス日付」を書き出すデータベースのカラム名を記述します。
+  DBのカラムは数値型(64bit)にします。例： BIGINT NOT NULL
+
+: sessionMaxInactiveCol
+  「セッションタイムアウト値(秒)」を書き出すデータベースのカラム名を記述します。
+  「現在日付 > 最終アクセス日付 + タイムアウト値」になった時点で
+  このセッションは切断(DBからも削除)されます。
+  DBのカラムは数値型(32bit)にします。例： INT NOT NULL
+
+: sessionValidCol
+  「セッション有効フラグ」を書き出すデータベースのカラム名を記述します。
+  DBのカラムは固定文字列型(1文字)にします。例： CHAR(1) NOT NULL
+
+ストアに利用するDBテーブルは、予め作成しておく必要があります。
+例を以下に挙げます。MySQLでの動作を確認しました。
+
+  create table tomcat_sessions (
+    session_id     varchar(100) not null primary key,
+    valid_session  char(1) not null,
+    max_inactive   int not null,
+    last_access    bigint not null,
+    app_name       varchar(255),
+    session_data   mediumblob,
+    KEY kapp_name(app_name)
+  );
+
+ストアからセッションを削除したい場合、全ての値を-1、((<saveOnRestart>))をfalseに設定して
+サーバ(又はアプリケーション)を再起動して下さい。
+
+== Realm
+親要素 : ((<Engine>)) / ((<Host>)) / ((<Context>))
+データベースに関する情報を記述する要素です。
+
+: className
+  使用するクラスを指定します。
+  このクラスは (({org.apache.catalina.Realm})) インターフェイスを実装している必要があります。
+
+  提供されているクラス群
+  * (({org.apache.catalina.realm.JDBCRealm}))
+  * (({org.apache.catalina.realm.DataSourceRealm}))
+  * (({org.apache.catalina.realm.JNDIRealm}))
+  * (({org.apache.catalina.realm.MemoryRealm}))
+
+== Resources
+様々なリソース情報を定義する要素です。
+
+
+== Valve
+様々なコンポーネントを定義する要素です。
+
+親要素 : ((<Engine>)) / ((<Host>)) / ((<Context>))
+
+=== Access Log Valve
+アクセスログのコンポーネントに関する記述です。
+
+: className
+  使用するクラスを指定します。
+  (({org.apache.catalina.valves.AccessLogValve})) を使用して下さい。
+
+: directory
+  ログを出力するディレクトリを指定します。
+  デフォルトでは (({CATALINA_HOME/logs})) になっています。
+
+: pattern
+  ログ出力フォーマットを定義します。
+  (({common})) / (({combined})) と記述すると、標準で用意されているフォーマットが用いられます。
+  独自のフォーマットを利用したい場合は、以下に記述するフォーマット文字列を組み合わせて記述します。
+
+  * %a - 
+    リモートIPアドレス
+  * %A - 
+    ローカルIPアドレス
+  * %b - 
+    サーブレットが出力したバイト数(HTTPヘッダを除く)
+    ただし0の場合は (({-}))と表記します。
+  * %B - 
+    サーブレットが出力したバイト数(HTTPヘッダを除く)
+  * %h - 
+    リモートホスト名。
+    ただし、(({resolveHosts})) が false の場合にはIPアドレスを返す(%aと同じ)
+  * %H - 
+    リクエストを要求したプロトコル(HTTP/1.1等)
+  * %l - 
+    常に (({-})) を返す(利用法は不明)
+  * %m - 
+    リクエストメソッド(GET,POST等)
+  * %p - 
+    このリクエストを受け取ったローカルのポート番号
+  * %q - 
+    クエリー文字列
+  * %r - 
+    リクエストメソッド + リクエストURI
+  * %s - 
+    レスポンスが返したステータスコード
+  * %S - 
+    ユーザのセッションID
+  * %t - 
+    現在時刻
+  * %u - 
+    リモートユーザ名
+  * %U - 
+    リクエストURI
+  * %v - 
+    ローカルサーバ名
+  * %D -
+    リクエストを処理するのに要した時間（ミリ秒単位）
+  * %T -
+    リクエストを処理するのに要した時間（秒単位）
+  
+: prefix
+  出力するファイル名のプレフィックス（先頭に付く文字列）を指定します。
+  デフォルトは"(({access_log.}))"です。
+
+: resolveHosts
+  ホスト名を解決するかどうかを指定します。
+  trueにすると、DNSを利用してIPアドレスからホスト名を取得します。
+  デフォルトはfalseです。
+
+: suffix
+  出力するファイル名のサフィックス（後方に付く文字列）を指定します。
+  デフォルトは""（空文字）です。
+
+: rotatable
+  ログのローテート処理を行うかどうかを指定します。
+  true（デフォルト）にすると、出力するログファイルは時間毎に変更されます。
+  
+: condition
+  条件付きでログを出力する場合に指定します。
+  例えば、conditionの値を"junk"と指定すると、
+  (({ServletRequest.getAttribute("junk") == null})) が成立する場合のみ
+  ログが出力されます。
+
+: fileDateFormat
+  ((<rotatable>)) がtrueのとき、出力するファイル名のフォーマットを指定します。
+  デフォルトでは"(({yyyy-MM-dd}))"です。このとき、ファイル名は
+  (({access_log.2004-01-26})) のようになります。
+  この場合、ログファイルのローテート間隔は1日になります。
+  フォーマットを"(({yyyy-MM-dd.HH}))"のようにすれば、ローテート間隔は1時間になります。
+  
+  フォーマット形式はJava標準クラスの(({SimpleDateFormat}))に準拠します。
+
+
+=== Remote Address Filter
+IPアドレスによるフィルタリングを掛けるコンポーネントです。
+
+: className
+  使用するクラスを指定します。
+  (({org.apache.catalina.valves.RemoteAddrValve})) を記述して下さい。
+
+: allow
+  許可するIPアドレスを記述します。複数指定する場合はカンマで区切って下さい。
+  「192.168.1.*」などのワイルドカード形式が利用できます。
+  この属性を記述した場合、指定したIPアドレスからのアクセスのみが許可されますが
+  記述しない場合はdenyで指定した((*以外*))の全てのIPアドレスからのアクセスが((*許可*))されます。
+
+: deny
+  拒否するIPアドレスを記述します。複数指定する場合はカンマで区切って下さい。
+  ワイルドカード形式が利用できます。
+
+allow と deny の両方に当てはまるIPアドレスは「拒否」されます。
+やや複雑なので解説します。
+
+: allowとdeny両方を指定した場合
+  allowで指定してあり、かつdenyで指定していないアドレスのみが許可されます。
+
+: allowのみ指定した場合
+  allowで指定したアドレスのみが許可されます。
+
+: denyのみ指定した場合
+  denyで指定した以外の全てのアドレスが許可されます。
+
+: 両方とも指定しなかった場合
+  全てのアドレスが許可されます。
+  …フィルタリングを掛けないのと一緒です(笑)。
+
+=== Remote Host Filter
+ホスト名によるフィルタリングを掛けるコンポーネントです。
+
+: className
+  使用するクラスを指定します。
+  (({org.apache.catalina.valves.RemoteHostValve})) を記述して下さい。
+
+: allow
+  許可するホスト名を記述します。複数指定する場合はカンマで区切って下さい。
+  「*.limy.org」などのワイルドカード形式が利用できます。
+  この属性を指定しない場合、denyで指定した以外の全てのホストからのアクセスが許可されます。
+
+: deny
+  拒否するホスト名を記述します。複数指定する場合はカンマで区切って下さい。
+  ワイルドカード形式が利用できます。
+
+allow と deny の両方に当てはまるホスト名は「拒否」されます。
+
+=== ((<Top|URL:./>))
+
+=end

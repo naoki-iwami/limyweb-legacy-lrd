@@ -1,0 +1,88 @@
+<!DOCTYPE xwork PUBLIC "-//OpenSymphony Group//XWork 1.1.1//EN" "http://www.opensymphony.com/xwork/xwork-1.1.1.dtd">
+
+<xwork>
+    <include file="webwork-default.xml"/>
+
+    <package name="default" extends="webwork-default">
+
+		<result-types>
+			<result-type name="extVelocity" class="org.limy.common.web.ExtVelocityResult" />
+		</result-types>
+
+        <action name="admin" class="adminAction">
+        	<interceptor-ref name="params"/>
+        	<result type="velocity">/WEB-INF/vm/admin/index.vm</result>
+        </action>
+
+        <action name="addRepository" class="addRepositoryAction">
+        	<interceptor-ref name="params"/>
+        	<result type="chain">
+        		<param name="actionName">admin</param>
+        	</result>
+        </action>
+
+        <action name="addDeployInfo" class="addDeployInfoAction">
+        	<interceptor-ref name="params"/>
+        	<result type="chain">
+        		<param name="actionName">admin</param>
+        	</result>
+        </action>
+
+<!--
+        <action name="addFileDeployInfo" class="addFileDeployInfoAction">
+        	<interceptor-ref name="params"/>
+        	<result type="chain">
+        		<param name="actionName">admin</param>
+        	</result>
+        </action>
+-->
+        <action name="updateProjectSetting" class="updateProjectSettingAction">
+        	<interceptor-ref name="params"/>
+        	<result type="chain">
+        		<param name="actionName">admin</param>
+        	</result>
+        </action>
+
+        <action name="modifyTemplate" class="modifyTemplateAction">
+        	<interceptor-ref name="params"/>
+        	<result type="velocity">/WEB-INF/vm/admin/template_top.vm</result>
+        	<result name="success_file" type="velocity">/WEB-INF/vm/admin/template_file.vm</result>
+        </action>
+        
+        <action name="lrd" class="lrdAction">
+        	<interceptor-ref name="params"/>
+        	<result type="velocity">/WEB-INF/vm/edit_type1.vm</result>
+        </action>
+
+        <action name="uploadFile" class="uploadFileAction">
+        	<interceptor-ref name="params"/>
+			<interceptor-ref name="fileUpload"/>
+			<interceptor-ref name="basicStack"/>
+        	<result type="chain">
+        		<param name="actionName">lrd</param>
+        	</result>
+        </action>
+        
+        <action name="comment" class="commentAction">
+        	<interceptor-ref name="params"/>
+        	<result type="redirect">${redirectUrl}#comment</result>
+        	<result name="error" type="velocity">/WEB-INF/vm/comment_error.vm</result>
+        </action>
+
+        <action name="rss" class="rssAction">
+        	<interceptor-ref name="params"/>
+        	<result type="extVelocity">
+        		<param name="location">/WEB-INF/vm/rss.vm</param>
+        		<param name="contentType">application/xml</param>
+        	</result>
+        	<result name="error" type="velocity">/WEB-INF/vm/error_rss.vm</result>
+        </action>
+
+        <action name="dwr" class="dwrAction">
+        	<interceptor-ref name="params"/>
+        	<result type="velocity">/WEB-INF/vm/dwr.vm</result>
+        </action>
+
+    </package>
+
+</xwork>

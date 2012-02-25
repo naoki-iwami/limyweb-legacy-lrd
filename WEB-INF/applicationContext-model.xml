@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE beans
+	PUBLIC "-//SPRING//DTD BEAN//EN"
+	"http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="location" value="/WEB-INF/application.properties"/> 
+    </bean>
+
+  	<bean id="lrdConfig" class="org.limy.lrd.LrdConfigImpl"
+  		  init-method="init" lazy-init="false">
+  	</bean>
+
+  	<bean id="lrdMultiModel" class="org.limy.lrd.model.LrdMultiModelImpl">
+		<property name="config"><ref bean="lrdConfig"/></property>
+		<property name="compileModel"><ref bean="lrdCompileModel"/></property>
+		<property name="cacheManager"><ref bean="lrdCacheManager"/></property>
+		<property name="localDeployer"><ref bean="lrdLocalDeployer"/></property>
+		<property name="ftpDeployer"><ref bean="lrdFtpDeployer"/></property>
+  	</bean>
+
+  	<bean id="lrdWriter" class="org.limy.lrd.writer.LrdFramedHtmlWriter">
+		<property name="velocityEngineModel"><ref bean="velocityEngineModel" /></property>
+		<property name="model"><ref bean="lrdMultiModel" /></property>
+  	</bean>
+
+  	<bean id="lrdParser" class="org.limy.lrd.parser.LrdParserImpl">
+  	</bean>
+
+  	<bean id="lrdCompiler" class="org.limy.lrd.deploy.LrdCompilerImpl">
+		<property name="lrdWriter"><ref bean="lrdWriter"/></property>
+		<property name="dao"><ref bean="lrdDao"/></property>
+		<property name="cacheManager"><ref bean="lrdCacheManager"/></property>
+  	</bean>
+
+  	<bean id="lrdLocalDeployer" class="org.limy.lrd.deploy.LrdLocalDeployerImpl">
+		<property name="infoCreator"><ref bean="targetInfoCreator"/></property>
+		<property name="cacheManager"><ref bean="lrdCacheManager"/></property>
+		<property name="compiler"><ref bean="lrdCompiler"/></property>
+  	</bean>
+
+  	<bean id="lrdFtpDeployer" class="org.limy.lrd.deploy.LrdFtpDeployerImpl">
+		<property name="infoCreator"><ref bean="targetInfoCreator"/></property>
+		<property name="cacheManager"><ref bean="lrdCacheManager"/></property>
+		<property name="compiler"><ref bean="lrdCompiler"/></property>
+  	</bean>
+
+  	<bean id="lrdRepositoryCreator"
+  		  class="org.limy.lrd.repository.LrdRepositoryCreatorImpl"
+  		  init-method="init" lazy-init="false">
+		<property name="config"><ref bean="lrdConfig"/></property>
+  	</bean>
+
+  	<bean id="lrdCacheManager" class="org.limy.lrd.LrdCacheManagerImpl">
+		<property name="config"><ref bean="lrdConfig"/></property>
+		<property name="model"><ref bean="lrdMultiModel" /></property>
+		<property name="compileModel"><ref bean="lrdCompileModel" /></property>
+		<property name="parser"><ref bean="lrdParser" /></property>
+		<property name="writer"><ref bean="lrdWriter"/></property>
+  	</bean>
+
+  	<bean id="targetInfoCreator" class="org.limy.lrd.model.TargetInfoCreatorImpl">
+		<property name="cacheManager"><ref bean="lrdCacheManager"/></property>
+  	</bean>
+
+  	<bean id="lrdDbModel" class="org.limy.lrd.model.LrdDbModelImpl">
+		<property name="config"><ref bean="lrdConfig"/></property>
+		<property name="dao"><ref bean="lrdDao"/></property>
+  	</bean>
+
+  	<bean id="lrdCompileModel" class="org.limy.lrd.model.LrdCompileModelImpl">
+		<property name="config"><ref bean="lrdConfig"/></property>
+		<property name="cacheManager"><ref bean="lrdCacheManager"/></property>
+		<property name="infoCreator"><ref bean="targetInfoCreator"/></property>
+		<property name="lrdWriter"><ref bean="lrdWriter"/></property>
+  	</bean>
+
+</beans>

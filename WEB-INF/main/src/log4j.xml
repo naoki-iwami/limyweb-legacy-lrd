@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/" debug="false">
+
+  <appender name="ALL" class="org.apache.log4j.FileAppender">
+    <param name="Append" value="false"/>
+    <param name="File" value="/var/log/tomcat/limyweb/lrd/all.log"/>
+    <layout class="org.apache.log4j.PatternLayout">
+      <param name="ConversionPattern" value="%d{yyyy/MM/dd HH:mm:ss} %-5p [%c{1}] %m%n"/>
+    </layout>
+  </appender>
+
+  <category name="com">
+    <priority value="DEBUG" />
+    <appender-ref ref="ALL"/>
+  </category>
+
+  <category name="org.directwebremoting">
+    <priority value="INFO" />
+    <appender-ref ref="ALL"/>
+  </category>
+
+  <category name="org.limy">
+    <priority value="INFO" />
+    <appender-ref ref="ALL"/>
+  </category>
+
+  <category name="velocityLog4j">
+    <priority value="INFO" />
+    <appender-ref ref="ALL"/>
+  </category>
+
+
+</log4j:configuration>

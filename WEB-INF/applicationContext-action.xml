@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE beans
+	PUBLIC "-//SPRING//DTD BEAN//EN"
+	"http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="location" value="/WEB-INF/application.properties"/> 
+    </bean>
+
+	<bean id="baseLrdAction" class="org.limy.lrd.common.BaseLrdAction"
+		abstract="true">
+		<property name="model"><ref bean="lrdMultiModel" /></property>
+	</bean>
+
+	<bean id="baseAdminAction" class="org.limy.lrd.admin.AbstractAdminAction"
+		parent="baseLrdAction" abstract="true">
+		<property name="config"><ref bean="lrdConfig" /></property>
+		<property name="model"><ref bean="lrdMultiModel" /></property>
+		<property name="repositoryCreator"><ref bean="lrdRepositoryCreator" /></property>
+	</bean>
+
+	<bean id="adminAction" class="org.limy.lrd.admin.AdminAction"
+			parent="baseAdminAction" singleton="false">
+	</bean>
+	<bean id="addRepositoryAction" class="org.limy.lrd.admin.AddRepositoryAction"
+			parent="baseAdminAction" singleton="false">
+	</bean>
+	<bean id="addDeployInfoAction" class="org.limy.lrd.admin.AddDeployInfoAction"
+			parent="baseAdminAction" singleton="false">
+	</bean>
+	
+	<bean id="updateProjectSettingAction" class="org.limy.lrd.admin.UpdateProjectSettingAction"
+			parent="baseAdminAction" singleton="false">
+	</bean>
+	<bean id="modifyTemplateAction" class="org.limy.lrd.admin.ModifyTemplateAction"
+			parent="baseAdminAction" singleton="false">
+		<property name="velocityEngineModel"><ref bean="velocityEngineModel" /></property>
+	</bean>
+
+	<bean id="lrdAction" class="org.limy.lrd.LrdExtAction"
+			parent="baseLrdAction" singleton="false">
+	</bean>
+
+	<bean id="rssAction" class="org.limy.lrd.RssAction"
+			parent="baseLrdAction" singleton="false">
+		<property name="showCount"><value>${rss.show.count}</value></property>
+		<property name="manager"><ref bean="lrdCacheManager"/></property>
+		<property name="dao"><ref bean="lrdDao"/></property>
+	</bean>
+
+	<bean id="commentAction" class="org.limy.lrd.LrdCommentAction"
+			parent="baseLrdAction" singleton="false">
+		<property name="dbModel"><ref bean="lrdDbModel" /></property>
+	</bean>
+
+	<bean id="uploadFileAction" class="org.limy.lrd.UploadFileAction"
+			parent="baseLrdAction" singleton="false">
+	</bean>
+
+	<bean id="dwrAction" class="org.limy.lrd.LrdDwrAction"
+			parent="baseLrdAction" singleton="false">
+		<property name="compileModel"><ref bean="lrdCompileModel" /></property>
+		<property name="dbModel"><ref bean="lrdDbModel" /></property>
+	</bean>
+
+</beans>

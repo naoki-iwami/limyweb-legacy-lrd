@@ -1,0 +1,84 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Lrd管理画面 - $!{title}</title>
+
+<link href="style/maven-base.css" type="text/css" rel="stylesheet" />
+<link href="style/maven-theme.css" type="text/css" rel="stylesheet" />
+<link href="style/limy-theme.css" type="text/css" rel="stylesheet" />
+
+<script src="dwr/interface/DWRAction.js"></script>
+<script src="dwr/engine.js"></script>
+<script src="dwr/util.js"></script>
+<script src="script/DWRActionUtil.js"></script>
+<script src="script/lrd-edit.js"></script>
+<script>
+var gRepositoryId = '$id';
+var gTargetId = '$lrdPath';
+
+</script>
+</head>
+<body onload="init()">
+
+<image id="timer" src="images/timer.gif" width="23" height="23" style="visilibity: hidden; position: absolute; x: 4; y: 4;">
+
+<div align="center"><b>$id</b></div>
+
+<div style="margin-left: 10; margin-right: 10;">
+<div align="right"><a href="admin.action">管理TOP</a></div>
+
+<div id="nowUrl">$lrdPath</div>
+
+<table id="mainMenu" border="0">
+  <tr>
+    <td valign="top">
+      <input id="mainButton" type="button" value="-" class="pbutton" onclick="toggleMenu()" title="Toggle show/hidden">
+    </td>
+    <td>
+    	<table id="mainText">
+    		<tr>
+    			#parse("WEB-INF/vm/part_mainText.vm")
+    		</tr>
+    	</table>
+    </td>
+  </tr>
+</table>
+
+<div id="adminBox">
+	<form method="post" action="uploadFile.action" enctype="multipart/form-data">
+		<input type="hidden" name="id" value="$id">
+		<input type="hidden" name="lrdPath" value="$lrdPath">
+		<input type="file" name="uploadFile" size="40">
+		<input type="submit" value="添付ファイル送信" class="button">
+		
+		#if ($attachFiles.size() > 0)
+			<a href="javascript:showAttachBlock()">[添付ファイル一覧($attachFiles.size())]</a>
+			<span id="attachBlock" style="display: none">
+			#foreach ($file in $attachFiles)
+				$file
+			#end
+			</span>
+		#end
+	</form>
+	<hr>
+	<input id="lrdPath" name="lrdPath" value="$lrdPath" size="40"> <input type="button" class="button" value="新規ファイル作成" onclick="createFile()">
+	<hr>
+</div>
+
+</div>
+
+<div id="preview">
+</div>
+
+<hr>
+<div align="right"><a id="logout" href="$logoutUrl">Logout</a></div>
+
+<form id="dwrForm">
+	<input type="hidden" name="repositoryId" value="">
+	<input type="hidden" name="lrdPath" value="">
+	<input type="hidden" name="methodName" value="">
+	<input type="hidden" name="contents" value="">
+</form>
+
+</body>
+</html>

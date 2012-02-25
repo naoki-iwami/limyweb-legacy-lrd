@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="LrdDao">
+
+	<typeAlias alias="lrdCommentInfo" type="org.limy.lrd.common.bean.LrdCommentInfo"/>
+
+	<typeAlias alias="lrdHistory" type="org.limy.lrd.common.bean.LrdHistory"/>
+
+	<resultMap id="lrdCommentInfoResult" class="lrdCommentInfo">
+		<result property="lrdPath" column="LRD_PATH"/>
+		<result property="userName" column="USER_NAME"/>
+		<result property="mainText" column="MAIN_TEXT"/>
+		<result property="submitTime" column="SUBMIT_TIME"/>
+	</resultMap>
+	
+	<resultMap id="lrdHistoryResult" class="lrdHistory">
+		<result property="lrdPath" column="LRD_PATH"/>
+		<result property="htmlUrl" column="HTML_URL"/>
+		<result property="commitTime" column="COMMIT_TIME"/>
+	</resultMap>
+	
+	<insert id="insertLrdHistory">
+		INSERT INTO LRD_HISTORY (REPOSITORY_ID, LRD_PATH, HTML_URL, COMMIT_TIME)
+		VALUES (#repositoryId#, #lrdPath#, #htmlUrl#, #commitTime#)
+	</insert>
+
+	<select id="getLrdHistories" resultMap="lrdHistoryResult">
+		SELECT LRD_PATH, HTML_URL, COMMIT_TIME
+		FROM LRD_HISTORY
+		WHERE REPOSITORY_ID = #repositoryId#
+		ORDER BY COMMIT_TIME DESC
+		LIMIT #showCount#
+	</select>
+
+	<insert id="insertLrdComment">
+		INSERT INTO LRD_COMMENT (REPOSITORY_ID, LRD_PATH, USER_NAME, MAIN_TEXT, SUBMIT_TIME)
+		VALUES (#repositoryId#, #lrdPath#, #userName#, #mainText#, now())
+	</insert>
+
+	<select id="selectCommentInfos" resultMap="lrdCommentInfoResult">
+		SELECT * FROM LRD_COMMENT
+		WHERE REPOSITORY_ID = #repositoryId# and LRD_PATH=#lrdPath# ORDER BY ID
+	</select>
+
+	<insert id="insertAdminLog">
+		INSERT INTO ADMIN_LOG (USER_ID, TARGET_DATE, TARGET_TIME, ACTION, NOTE)
+		VALUES (#userId#, #targetDate#, #targetTime#, #action#, #note#)
+	</insert>
+	
+</sqlMap>

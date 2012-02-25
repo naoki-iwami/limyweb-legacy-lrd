@@ -1,0 +1,166 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>管理画面</title>
+
+<link href="style/maven-base.css" type="text/css" rel="stylesheet" />
+<link href="style/maven-theme.css" type="text/css" rel="stylesheet" />
+<link href="style/limy-theme.css" type="text/css" rel="stylesheet" />
+<script>
+function get(id) { return document.getElementById(id); }
+function showConfigHelp() {
+	alert("設定ファイルの場所を変更するには、\n $contextXmlPath \nを書き換えて下さい。");
+}
+function clickFtpDeploy(el) {
+	el.form.action = "addDeployInfo.action";
+	el.form.submit();
+}
+function showBlock(headId, id) {
+	get(headId).style.display = "none";
+	get(id).style.display = "block";
+}
+// リポジトリ種別の変更
+function changeType(el) {
+	if (el.value == "0") {
+		get("fileBlock").style.display = "block";
+		get("svnBlock").style.display = "none";
+	} else {
+		get("fileBlock").style.display = "none";
+		get("svnBlock").style.display = "block";
+	}
+}
+// ファイルのリポジトリ位置種別変更
+function changeUrlType(el) {
+	if (el.value == "0") {
+		get("repositoryUrl").style.display = "none";
+	} else {
+		get("repositoryUrl").style.display = "block";
+	}
+}
+function toggleBlock(id) {
+	if (get(id).style.display == "none") {
+		get(id).style.display = "block";
+	} else {
+		get(id).style.display = "none";
+	}
+}
+</script>
+</head>
+<body>
+
+<h1>管理画面</h1>
+
+<div style="margin-left: 10; margin-right: 10;">
+
+<br>
+
+設定ファイル : $configFilePath&nbsp;&nbsp;&nbsp;&nbsp;… <a href="javascript:showConfigHelp()">[設定ファイルの場所を変更する]</a><br>
+
+<h4>リポジトリ一覧</h4>
+	<table style="border: 1px dotted #46AE8B; background-color: #EEFDFF" border=0>
+	#foreach ($repository in $configRootBean.repositoryBeans)
+	<tr>
+		<td>
+			<img src="images/circle.gif">
+			<a href="lrd.action?id=$repository.id&lrdPath=index.lrd">$repository.name</a>
+		</td>
+		<td>$repository.type</td>
+		<td>$repository.url</td>
+	</tr>
+		<form method="post" action="updateProjectSetting.action">
+		<input type="hidden" name="repositoryId" value="$repository.id">
+		<tr>
+			<td></td>
+			<td colspan="2">
+				<div id="setting.$repository.id" style="display: none;">
+					<input type="checkbox" name="enableComment" $repository.checkedEnableComment> コメント<br>
+					リポジトリ文字コード : <input name="repositoryCharset" value="$repository.repositoryCharset"><br>
+					デプロイ先文字コード : <input name="viewCharset" value="$repository.viewCharset"><br>
+					開始年 : <input name="startYear" value="$repository.startYear"><br>
+					著作者 : <input name="author" value="$repository.author"><br>
+					<input type="submit" value="設定更新">
+				</div>
+				<div align="right"><a href="javascript:toggleBlock('setting.$repository.id')">[各種設定]</a></div>
+				<div align="right"><a href="modifyTemplate.action?repositoryId=$repository.id">テンプレート編集</a></div>
+			</td>
+		</tr>
+		</form>
+		<tr>
+			<td></td>
+			<td colspan="2">
+				<div align=center class="underlineTitle"></div>
+				デプロイ先一覧
+			</td>
+		</tr>
+		#foreach ($deployInfo in $repository.deployInfos)
+		<tr>
+			<td></td>
+			<td></td>
+			<td>
+				$deployInfo.id --- <a href="$deployInfo.deployUrl">$deployInfo.deployUrl</a>
+			</td>
+		</tr>
+		#end
+		<form method="post" action="addDeployInfo.action">
+		<tr>
+			<td></td>
+			<input type="hidden" name="repositoryId" value="$repository.id">
+			<td align="left" colspan="2">
+				<div id="deployBlock$repository.id" style="display: none;">
+					<div align=center class="underlineTitle"></div>
+					#parse ("WEB-INF/vm/admin/part_deploy.vm")
+				</div>
+				<div id="deployHead$repository.id" align="right">
+##					<a href="javascript:showBlock('deployHead$repository.name', 'deployBlock$repository.name')">[デプロイ先追加]</a>
+					<a href="javascript:toggleBlock('deployBlock$repository.id')">[デプロイ先設定]</a>
+				</div>
+			</td>
+		</tr>
+		</form>
+		<tr>
+			<td colspan="3" style="border-top: 1px dotted #46AE8B;"><br></td>
+		</tr>
+	#end
+	</table>
+
+<br>
+<br>
+<div align=center class="underlineTitle"></div>
+
+<a id="newRepositoryHead" href="javascript:showBlock('newRepositoryHead', 'newRepositoryBlock')">[新規リポジトリ追加]</a>
+<div id="newRepositoryBlock" style="display: none;">
+  <form id="formAddRepository" method="post" action="addRepository.action">
+	リポジトリID : <input class="resInput" size="10" name="repositoryId">
+	リポジトリ名 : <input class="resInput" size="20" name="repositoryName"><br>
+	リポジトリ種別 : <select id="repositoryType" name="repositoryType" onchange="changeType(this)"><option value="0">ファイル<option value="1">Subversion</select>
+	<div id="fileBlock">
+		<table border="0">
+		<tr>
+			<td nowrap width="200">ファイル位置 : <select id="repositoryUrlType" name="repositoryUrlType" onchange="changeUrlType(this)"><option value="0">デフォルト<option value="1">カスタマイズ</select></td>
+			<td nowrap><input id="repositoryUrl" class="resInput" size="30" name="repositoryUrl" style="display: none"></td>
+		</tr>
+		</table>
+	</div>
+	<div id="svnBlock" style="display: none">
+		<table border="0">
+		<tr>
+			<td nowrap width="450">SVNリポジトリURL : <input class="resInput" size="40" name="repositorySvnUrl"></td>
+			<td nowrap width="200">SVNユーザ名 : <input class="resInput" size="10" name="repositorySvnUser"></td>
+			<td nowrap>SVNパスワード : <input type="password" class="resInput" size="10" name="repositorySvnPassword"></td>
+		</tr>
+		</table>
+	</div>
+	<a id="newCustomizeHead" href="javascript:showBlock('newCustomizeHead', 'newCustomizeBlock')">[高度なオプション]</a>
+	<div id="newCustomizeBlock" style="display: none">
+		Local Context Directory : <input class="resInput" size="60" name="localContextDir">
+	</div>
+	<br>
+
+	<input class="resButton" type="submit" value="新規リポジトリ追加">
+  </form>
+</div>
+
+</div>
+
+</body>
+</html>

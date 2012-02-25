@@ -1,0 +1,32 @@
+#macro(writeMenuPreview $node)
+	#if ($node.isFolder())
+        <h5>
+          $!Util.markStrongStart($node.path, $targetPath)<a href="lrd.action?id=$repositoryId&lrdPath=${node.path.createNewPath("index.lrd").getRelativePath()}">$Util.getIndexLrdTitle($node.path)</a>$!Util.markStrongEnd($node.path, $targetPath)
+        </h5>
+        <ul>
+		#foreach ($child in $node.subNodes)
+		  #if ($child.isFolder() || ($Util.isLrd($child.path) && !$Util.isIndex($child.path)))
+          <li>
+			#writeMenuPreview($child)
+		  </li>
+		  #end
+		#end
+		</ul>
+	#else
+		$!Util.markStrongStart($node.path, $targetPath)<a href="lrd.action?id=$repositoryId&lrdPath=$!node.path.relativePath">$!Util.getLrdTitle($node.path)</a>$!Util.markStrongEnd($node.path, $targetPath)
+	#end
+#end
+
+<div id="leftColumn">
+	<div id="navcolumn">
+		<div id="menuOverview">
+			#writeMenuPreview($menuNodes)
+		</div>
+    </div>
+</div>
+
+<div id="bodyColumn">
+	<div class="contentBox">
+		$mainContents
+	</div>
+</div>

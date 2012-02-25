@@ -1,0 +1,20 @@
+#macro(writeMenu $node)
+	#if ($node.isFolder())
+        <h5>
+          <a href="${baseHref}/$node.path.relativePath">$Util.getIndexLrdTitle($node.path)</a>
+        </h5>
+        <ul>
+		#foreach ($child in $node.subNodes)
+		  #if ($child.isFolder() || ($Util.isLrd($child.path) && !$Util.isIndex($child.path)))
+          <li>
+			#writeMenu($child)
+		  </li>
+		  #end
+		#end
+		</ul>
+	#else
+		<a href="${baseHref}/$!Util.getHtmlPath($node.path)">$!Util.getLrdTitle($node.path)</a>
+	#end
+#end
+
+#writeMenu($menuNodes)
